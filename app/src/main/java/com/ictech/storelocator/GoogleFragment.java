@@ -35,7 +35,7 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 /**
  * A simple {@link Fragment} subclass.
  */
-public abstract class GoogleFragment extends Fragment{
+public class GoogleFragment extends Fragment{
 
     private MapView mMapView;
     private GoogleMap google;
@@ -46,6 +46,14 @@ public abstract class GoogleFragment extends Fragment{
 
     public GoogleFragment() {
         // Required empty public constructor
+    }
+
+    public static GoogleFragment newInstance(String sess){
+        GoogleFragment fragment = new GoogleFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("session", sess);
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
