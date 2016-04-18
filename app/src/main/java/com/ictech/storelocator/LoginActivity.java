@@ -2,16 +2,19 @@ package com.ictech.storelocator;
 
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.ictech.storelocator.loginfragment.First_fragment;
+import com.ictech.storelocator.loginfragment.Form_fragment;
 
 public class LoginActivity extends Activity
-        implements First_fragment.OnFragmentInteractionListener {
+        implements First_fragment.OnFragmentInteractionListener,
+                    Form_fragment.OnFromInteraction {
 
     private static final String FragTag = "firstfragment";
+    private static final String FragTag2 = "formfragment";
     FragmentManager fragmentManager = getFragmentManager();
+    Form_fragment form_fragment;
     First_fragment first_fragment;
 
     @Override
@@ -29,8 +32,13 @@ public class LoginActivity extends Activity
 
     @Override
     public void onFragmentInteraction() {
-
+        form_fragment = Form_fragment.newInstance();
         fragmentManager.beginTransaction()
-                .replace(R.id.fragment_frame, )
+                .replace(R.id.fragment_frame, form_fragment, FragTag2)
+                .commit();
+    }
+
+    @Override
+    public void onFromInteraction() {
     }
 }
