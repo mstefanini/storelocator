@@ -27,9 +27,7 @@ public class First_fragment extends Fragment {
     }
 
     public static First_fragment newInstance() {
-        First_fragment fragment = new First_fragment();
-
-        return fragment;
+        return new First_fragment();
     }
 
     @Override
