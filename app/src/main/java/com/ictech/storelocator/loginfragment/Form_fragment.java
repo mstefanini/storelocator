@@ -1,5 +1,6 @@
 package com.ictech.storelocator.loginfragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
@@ -79,7 +80,7 @@ public class Form_fragment extends Fragment {
                     byte byteData[] = md.digest();
                     String base64 = Base64.encodeToString(byteData, Base64.DEFAULT);
 
-                    request(base64, email.getText().toString(), getContext());
+                    request(base64, email.getText().toString(), getContext());  //getContext è API 23
                 } else {
                     requestError();
                 }
@@ -123,7 +124,7 @@ public class Form_fragment extends Fragment {
 
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(Activity context) {
         super.onAttach(context);
         if (context instanceof OnFromInteraction) {
             mListener = (OnFromInteraction) context;

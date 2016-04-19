@@ -8,8 +8,9 @@
     <!-- TODO: Update blank fragment layout -->
 
     <ImageButton
-        android:layout_width="251dp"
-        android:layout_height="212dp"
+        android:layout_width="167dp"
+        android:layout_height="167dp"
         android:id="@+id/imageButton"
-        android:layout_gravity="center" />
+        android:layout_gravity="center"
+        android:background="@drawable/jessecerchio" />
 </FrameLayout>

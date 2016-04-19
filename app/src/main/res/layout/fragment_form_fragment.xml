@@ -1,43 +1,68 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
+    android:layout_width="wrap_content"
     android:layout_height="match_parent"
+    android:background="@color/black"
     tools:context=".loginfragment.Form_fragment">
 
     <!-- TODO: Update blank fragment layout -->
 
     <ImageView
+        android:background="@drawable/jesseweare"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/imageView"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="20dp"
+        android:layout_above="@+id/email" />
 
     <EditText
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:backgroundTint="@color/whiteDark"
+        android:hint="Password"
+        android:textColorHint="@color/goldDark"
+        android:textColor="@color/gold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
         android:id="@+id/pswd"
+        android:inputType="textWebPassword"
         android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true"
-        android:inputType="textWebPassword" />
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
 
     <EditText
+        android:layout_marginLeft="35dp"
+        android:layout_marginRight="35dp"
+        android:backgroundTint="@color/whiteDark"
+        android:textColorHint="@color/goldDark"
+        android:hint="Email"
+        android:textColor="@color/gold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:inputType="textEmailAddress"
         android:ems="10"
         android:id="@+id/email"
         android:layout_above="@+id/pswd"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_marginLeft="70dp"
+        android:background="@drawable/roundedbutton"
+        android:layout_marginRight="70dp"
+        android:textColor="@color/gold"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Login"
         android:id="@+id/button"
         android:layout_below="@+id/pswd"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="70dp" />
+        android:layout_marginTop="70dp"
+        android:layout_alignStart="@+id/pswd"
+        android:layout_alignEnd="@+id/pswd" />
 
 </RelativeLayout>
