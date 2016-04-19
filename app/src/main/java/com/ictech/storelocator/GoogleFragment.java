@@ -28,18 +28,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.HttpEntity;
 import cz.msebera.android.httpclient.HttpResponse;
-import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.client.ClientProtocolException;
 import cz.msebera.android.httpclient.client.HttpClient;
-import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
-import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
-import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
 
 /**
@@ -91,73 +85,8 @@ public class GoogleFragment extends Fragment{
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-
-
-        // CANCELLARE DA QUI A STOP (RIGA 159) E PRENDERE SESSIONE DA MATTEO
-        HttpResponse httpResponse;
-        HttpClient clientPost = new DefaultHttpClient();
-
-        HttpPost httpPost = new HttpPost("http://its-bitrace.herokuapp.com/api/public/v2/login");
-        ArrayList<NameValuePair> myKey = new ArrayList<>();
-        myKey.add(new BasicNameValuePair("email", "tsac-2015@tecnicosuperiorekennedy.it"));
-        myKey.add(new BasicNameValuePair("password", "AkL6KhBcibHLVGZbs/JyBJqMCGB6nDLK/0ovxGZHojt6EepTxpdfygqKsIWz3Q4FS4wyHY4cIrP1W8nHAd8F4A=="));
-
-        try {
-            httpPost.setEntity(new UrlEncodedFormEntity(myKey));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-        //making POST request.
-        InputStream postStream = null;
-        String resultPost ="";
-        try {
-            httpResponse = clientPost.execute(httpPost);
-            HttpEntity entityPost = httpResponse.getEntity();
-            postStream = entityPost.getContent();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(postStream, "UTF-8"), 8);
-            StringBuilder sb = new StringBuilder();
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            resultPost = sb.toString();
-        } catch (NetworkOnMainThreadException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (postStream != null)
-                    postStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-
-        JSONObject jsoPost = null;
-        try {
-            jsoPost = new JSONObject(resultPost);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        try {
-
-            if(jsoPost.getBoolean("success")){
-                JSONObject temp = jsoPost.getJSONObject("data");
-
-                sessione = temp.getString("session");
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        //SBLOCCARE LA RIGA PER AVERE LA SESSIONE DA MATTEO ED ELIMINA TUTTO QUELLO SOPRA
-        //sessione = getArguments().getString("session");
+        
+        sessione = getArguments().getString("session");
         HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(url);
         request.setHeader(header, sessione);
