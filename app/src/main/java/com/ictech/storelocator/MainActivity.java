@@ -25,9 +25,10 @@ public class MainActivity extends Activity {
         FragmentManager fm = getFragmentManager();
         mList = (StoreList) fm.findFragmentByTag(ELENCO);
         if(mList == null) {
-            FragmentTransaction vTrans = fm.beginTransaction();
             mList = new StoreList();
-            vTrans.add(R.id.container, mList, ELENCO).commit();
+            FragmentTransaction vTrans = fm.beginTransaction()
+                        .add(R.id.container, mList, ELENCO)
+                        .commit();
         }
 
         //inizializzo fragmnet della mappa di google

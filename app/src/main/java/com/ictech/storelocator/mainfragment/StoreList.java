@@ -2,6 +2,7 @@ package com.ictech.storelocator.mainfragment;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -40,7 +41,7 @@ public class StoreList extends Fragment {
 
 
     public interface ResponseList {
-        //TODO: implementa interfaccia fragment elenco store
+        //TODO: implementa interfaccia al fragment elenco store
         void updateList();
     }
 
@@ -68,14 +69,15 @@ public class StoreList extends Fragment {
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
 
-        Activity vHostActivity = getActivity();
+        Context vHostActivity = getContext();
         if(vHostActivity instanceof ResponseList) {
             mResponseList = (ResponseList) vHostActivity;
         }
     }
+
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
