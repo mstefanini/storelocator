@@ -1,0 +1,109 @@
+diff a/.idea/workspace.xml b/.idea/workspace.xml	(rejected hunks)
+@@ -68,28 +68,28 @@
+       <file leaf-file-name="GoogleFragment.java" pinned="false" current-in-tab="true">
+         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ictech/storelocator/GoogleFragment.java">
+           <provider selected="true" editor-type-id="text-editor">
+-            <state vertical-scroll-proportion="0.40753046">
+-              <caret line="52" column="33" selection-start-line="52" selection-start-column="33" selection-end-line="52" selection-end-column="33" />
++            <state vertical-scroll-proportion="-0.35658914">
++              <caret line="37" column="20" selection-start-line="37" selection-start-column="20" selection-end-line="37" selection-end-column="20" />
+               <folding>
+                 <element signature="imports" expanded="true" />
+-                <element signature="e#1510#1511#0" expanded="true" />
+-                <element signature="e#1550#1551#0" expanded="true" />
+-                <element signature="e#4574#4575#0" expanded="true" />
+-                <element signature="e#4605#4606#0" expanded="true" />
+-                <element signature="e#4649#4650#0" expanded="true" />
+-                <element signature="e#4681#4682#0" expanded="true" />
+-                <element signature="e#4751#4752#0" expanded="true" />
+-                <element signature="e#4802#4803#0" expanded="true" />
+-                <element signature="e#4845#4846#0" expanded="true" />
+-                <element signature="e#4876#4877#0" expanded="true" />
+-                <element signature="e#4918#4919#0" expanded="true" />
+-                <element signature="e#4948#4949#0" expanded="true" />
+-                <element signature="e#4993#4994#0" expanded="true" />
+-                <element signature="e#5026#5027#0" expanded="true" />
+-                <element signature="e#5070#5071#0" expanded="true" />
+-                <element signature="e#5102#5103#0" expanded="true" />
+-                <element signature="e#5421#5422#0" expanded="true" />
+-                <element signature="e#5471#5472#0" expanded="true" />
++                <element signature="e#1768#1769#0" expanded="true" />
++                <element signature="e#1808#1809#0" expanded="true" />
++                <element signature="e#4832#4833#0" expanded="true" />
++                <element signature="e#4863#4864#0" expanded="true" />
++                <element signature="e#4907#4908#0" expanded="true" />
++                <element signature="e#4939#4940#0" expanded="true" />
++                <element signature="e#5009#5010#0" expanded="true" />
++                <element signature="e#5060#5061#0" expanded="true" />
++                <element signature="e#5103#5104#0" expanded="true" />
++                <element signature="e#5134#5135#0" expanded="true" />
++                <element signature="e#5176#5177#0" expanded="true" />
++                <element signature="e#5206#5207#0" expanded="true" />
++                <element signature="e#5251#5252#0" expanded="true" />
++                <element signature="e#5284#5285#0" expanded="true" />
++                <element signature="e#5328#5329#0" expanded="true" />
++                <element signature="e#5360#5361#0" expanded="true" />
++                <element signature="e#5679#5680#0" expanded="true" />
++                <element signature="e#5729#5730#0" expanded="true" />
+               </folding>
+             </state>
+           </provider>
+@@ -1974,8 +1974,8 @@
+         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_google.xml" />
+         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
+         <option value="$PROJECT_DIR$/app/src/main/java/com/ictech/storelocator/Google.java" />
+-        <option value="$PROJECT_DIR$/app/src/main/java/com/ictech/storelocator/GoogleFragment.java" />
+         <option value="$PROJECT_DIR$/app/build.gradle" />
++        <option value="$PROJECT_DIR$/app/src/main/java/com/ictech/storelocator/GoogleFragment.java" />
+       </list>
+     </option>
+   </component>
+@@ -2409,28 +2409,28 @@
+     </entry>
+     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/ictech/storelocator/GoogleFragment.java">
+       <provider selected="true" editor-type-id="text-editor">
+-        <state vertical-scroll-proportion="0.40753046">
+-          <caret line="52" column="33" selection-start-line="52" selection-start-column="33" selection-end-line="52" selection-end-column="33" />
++        <state vertical-scroll-proportion="-0.35658914">
++          <caret line="37" column="20" selection-start-line="37" selection-start-column="20" selection-end-line="37" selection-end-column="20" />
+           <folding>
+             <element signature="imports" expanded="true" />
+-            <element signature="e#1510#1511#0" expanded="true" />
+-            <element signature="e#1550#1551#0" expanded="true" />
+-            <element signature="e#4574#4575#0" expanded="true" />
+-            <element signature="e#4605#4606#0" expanded="true" />
+-            <element signature="e#4649#4650#0" expanded="true" />
+-            <element signature="e#4681#4682#0" expanded="true" />
+-            <element signature="e#4751#4752#0" expanded="true" />
+-            <element signature="e#4802#4803#0" expanded="true" />
+-            <element signature="e#4845#4846#0" expanded="true" />
+-            <element signature="e#4876#4877#0" expanded="true" />
+-            <element signature="e#4918#4919#0" expanded="true" />
+-            <element signature="e#4948#4949#0" expanded="true" />
+-            <element signature="e#4993#4994#0" expanded="true" />
+-            <element signature="e#5026#5027#0" expanded="true" />
+-            <element signature="e#5070#5071#0" expanded="true" />
+-            <element signature="e#5102#5103#0" expanded="true" />
+-            <element signature="e#5421#5422#0" expanded="true" />
+-            <element signature="e#5471#5472#0" expanded="true" />
++            <element signature="e#1768#1769#0" expanded="true" />
++            <element signature="e#1808#1809#0" expanded="true" />
++            <element signature="e#4832#4833#0" expanded="true" />
++            <element signature="e#4863#4864#0" expanded="true" />
++            <element signature="e#4907#4908#0" expanded="true" />
++            <element signature="e#4939#4940#0" expanded="true" />
++            <element signature="e#5009#5010#0" expanded="true" />
++            <element signature="e#5060#5061#0" expanded="true" />
++            <element signature="e#5103#5104#0" expanded="true" />
++            <element signature="e#5134#5135#0" expanded="true" />
++            <element signature="e#5176#5177#0" expanded="true" />
++            <element signature="e#5206#5207#0" expanded="true" />
++            <element signature="e#5251#5252#0" expanded="true" />
++            <element signature="e#5284#5285#0" expanded="true" />
++            <element signature="e#5328#5329#0" expanded="true" />
++            <element signature="e#5360#5361#0" expanded="true" />
++            <element signature="e#5679#5680#0" expanded="true" />
++            <element signature="e#5729#5730#0" expanded="true" />
+           </folding>
+         </state>
+       </provider>
