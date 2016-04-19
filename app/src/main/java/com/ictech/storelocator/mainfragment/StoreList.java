@@ -21,26 +21,13 @@ public class StoreList extends Fragment {
     private RecyclerView mRecyclerView;
     private StaggeredGridLayoutManager mStaggeredLayoutManager;
     private ResponseList mResponseList;
-    private static final String LISTA = "elenco_store";
+    public final String LISTA = "elenco_store";
     //TODO
     //inizializzo la variabile come Object generico intanto
     Object mList;
 
-    public StoreList() {
-
-    }
-
-    public static StoreList newInstance(String string){
-        StoreList fragment = new StoreList();
-        Bundle bundle = new Bundle();
-        bundle.putString(LISTA, string);
-        fragment.setArguments(bundle);
-        return fragment;
-    }
-
-
     public interface ResponseList {
-        //TODO: implementa interfaccia fragment elenco store
+        //TODO
         void updateList();
     }
 
