@@ -2,9 +2,11 @@ package com.ictech.storelocator.loginfragment;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.util.Base64;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.ictech.storelocator.MainActivity;
 import com.ictech.storelocator.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
@@ -23,6 +26,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
@@ -40,6 +45,7 @@ import cz.msebera.android.httpclient.Header;
  */
 public class Form_fragment extends Fragment {
 
+    private static final String SESSTAG = "session";
     private static final String url = "http://its-bitrace.herokuapp.com/api/public/v2/login";
 
     private OnFromInteraction mListener;
@@ -72,18 +78,18 @@ public class Form_fragment extends Fragment {
                 MessageDigest md = null;
                 try {
                     md = MessageDigest.getInstance("SHA-512");
+                    if (md != null) {
+                        md.update(pswd.getText().toString().getBytes());
+                        byte byteData[] = md.digest();
+                        String base64 = Base64.encodeToString(byteData, Base64.DEFAULT);
+                        request(base64.replace("\n", ""), email.getText().toString(), getContext());  //getContext è API 23
+                    } else {
+                        requestError();
+                    }
                 } catch (NoSuchAlgorithmException e) {
                     e.printStackTrace();
                 }
-                if (md != null) {
-                    md.update(pswd.getText().toString().getBytes());
-                    byte byteData[] = md.digest();
-                    String base64 = Base64.encodeToString(byteData, Base64.DEFAULT);
 
-                    request(base64, email.getText().toString(), getContext());  //getContext è API 23
-                } else {
-                    requestError();
-                }
             }
         });
 
@@ -92,6 +98,7 @@ public class Form_fragment extends Fragment {
 
     public void request(String psw, String email, final Context context){
         AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+        asyncHttpClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
         RequestParams requestParams = new RequestParams();
         requestParams.add("email", email);
         requestParams.add("password", psw);
@@ -101,8 +108,14 @@ public class Form_fragment extends Fragment {
                 Boolean success;
                 try{
                     JSONObject jsonObject = new JSONObject(new String(responseBody));
-                    if((success = jsonObject.getBoolean("success")) != null){
+                    Log.d("Prova", jsonObject.toString());
+                    if((success = jsonObject.getBoolean("success"))){
                         Toast.makeText(getContext(), "SUCCESS TRUE", Toast.LENGTH_LONG).show();
+                        Bundle bundle = new Bundle();
+                        bundle.putString(SESSTAG, jsonObject.getJSONObject("data").getString("session"));
+                        Intent intent = new Intent(getContext(), MainActivity.class);
+                        intent.putExtras(bundle);
+                        startActivity(intent);
                     }else{
                         Toast.makeText(getContext(), "SUCCESS FALSE", Toast.LENGTH_LONG).show();
                     }
