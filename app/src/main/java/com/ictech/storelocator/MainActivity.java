@@ -21,25 +21,5 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // inizializzo fragment di elenco degli store
-        FragmentManager fm = getFragmentManager();
-        mList = (StoreList) fm.findFragmentByTag(ELENCO);
-        if(mList == null) {
-            mList = new StoreList();
-            FragmentTransaction vTrans = fm.beginTransaction()
-                        .add(R.id.container, mList, ELENCO)
-                        .commit();
-        }
-
-        //inizializzo fragmnet della mappa di google
-
-        FragmentManager fmGoogle = getFragmentManager();
-        mMaps = (GoogleFragment) fmGoogle.findFragmentByTag(MAPPA);
-        if(mMaps == null){
-            mMaps = new GoogleFragment();
-            FragmentTransaction vTrans = fmGoogle.beginTransaction()
-                        .add(R.id.container, mMaps, MAPPA)
-                        .commit();
-        }
     }
 }
