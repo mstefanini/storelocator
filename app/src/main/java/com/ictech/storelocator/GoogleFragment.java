@@ -3,8 +3,11 @@ package com.ictech.storelocator;
 
 import android.app.Activity;
 import android.app.Fragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.NetworkOnMainThreadException;
+import android.os.StrictMode;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +16,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.loopj.android.http.HttpGet;
 
@@ -42,6 +46,7 @@ public class GoogleFragment extends Fragment{
     private String sessione;
     private String url = "http://its-bitrace.herokuapp.com/api/v2/stores";
     private String header = "x-bitrace-session";
+    private JSONArray jsonArray;
 
 
     public GoogleFragment() {
@@ -70,12 +75,17 @@ public class GoogleFragment extends Fragment{
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
+        google = mMapView.getMap();
+
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+        
         sessione = getArguments().getString("session");
         HttpClient client = new DefaultHttpClient();
         HttpGet request = new HttpGet(url);
@@ -117,18 +127,19 @@ public class GoogleFragment extends Fragment{
         }
 
         try {
+
             if(jObject.getBoolean("success")){
-                JSONArray jsonArray = jObject.getJSONArray("data");
+                jsonArray = jObject.getJSONArray("data");
                 if(jsonArray.length() > 0){
                     for (int i = 0; i < jsonArray.length(); i++) {
 
                         try {
                             JSONObject oneObject = jsonArray.getJSONObject(i);
-                            google = mMapView.getMap();
-                                        // adding marker
+
                             google.addMarker( new MarkerOptions().position(
-                                            new LatLng(oneObject.getDouble("latitude"), oneObject.getDouble("longitude"))).title(oneObject.getString("name"))
+                                            new LatLng(oneObject.getDouble("latitude"), oneObject.getDouble("longitude"))).title(oneObject.getString("name")).draggable(true)
                             );
+                            Log.d("TAG",oneObject.getDouble("latitude") + " " +  oneObject.getDouble("longitude"));
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -139,9 +150,30 @@ public class GoogleFragment extends Fragment{
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        google.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 
+            @Override
+            public void onInfoWindowClick(Marker marker) {
+                Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                Bundle bundle = new Bundle();
+
+                bundle.putString("session", sessione);
+                try {
+                    String id = marker.getId();
+                    id = id.substring(1,id.length());
+                    bundle.putString("guid", jsonArray.getJSONObject(Integer.parseInt(id)).getString("guid"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
         return view;
     }
+
+
 
 
     @Override
