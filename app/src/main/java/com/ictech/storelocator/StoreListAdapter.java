@@ -12,14 +12,19 @@ import android.widget.TextView;
 import com.ictech.storelocator.R;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+
 /**
  * Created by Ingrid on 19/04/2016.
  */
 public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.ViewHolder>{
     Context mContext;
+    ArrayList<Negozio> arrayList;
 
-    public StoreListAdapter(Context context) {
+    public StoreListAdapter(Context context, ArrayList<Negozio> arrayList) {
         this.mContext = context;
+        this.arrayList = arrayList;
+
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
@@ -39,9 +44,7 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.View
 
     @Override
     public int getItemCount() {
-        //TODO: prendere dal Bundle id negozio
-        //returns the number of items from your data array.
-        //return new PlaceData().placeList().size();
+        return  arrayList.size();
     }
 
 
@@ -54,11 +57,9 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        //TODO: collegare Store agli elementi del viewHolder
-        //binds the Place object to the UI elements in ViewHolder. You’ll use Picasso to cache the images for the list.
-        //final Place store = new PlaceData().placeList().get(position);
-        //holder.storeName.setText(store.name);
-        //Picasso.with(mContext).load(store.getImageResourceId(mContext)).into(holder.storeImage);
+        final Negozio negozio = new ArrayList<Negozio>().get(position);
+        holder.storeName.setText(negozio.nome);
+        Picasso.with(mContext).load(negozio.getImageResourceId(mContext)).into(holder.storeImage);
     }
 }
 
