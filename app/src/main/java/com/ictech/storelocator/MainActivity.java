@@ -2,6 +2,7 @@ package com.ictech.storelocator;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,9 +15,10 @@ public class MainActivity extends Activity {
     private static final String SESSTAG = "session";
     private static final String CURRENTITEM = "currentitem";
     private static final String GMAPSFRAG = "googlemapsfragment";
-    private static final String HOMEFRAG = "homefragment";
+    private static final String ELENCO = "fragment_RecycleView";
     private FragmentManager fragmentManager = getFragmentManager();
     private GoogleFragment googleFragment;
+    private StoreList storeList;
     private String session;
     private AHBottomNavigation bottomNavigation;
 
@@ -54,14 +56,15 @@ public class MainActivity extends Activity {
         }
 
         googleFragment = GoogleFragment.newInstance(session);
-        // TODO: aggiungere fragment lista!
-
+        storeList = StoreList.newInstance(session);
 
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position, boolean wasSelected) {
                 if (position == 0) {
-                    // TODO
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.frame, storeList, ELENCO)
+                            .commit();
                 }
                 if (position == 1) {
                     fragmentManager.beginTransaction()
