@@ -5,12 +5,11 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.NetworkOnMainThreadException;
 import android.os.StrictMode;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
@@ -18,35 +17,29 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.loopj.android.http.HttpGet;
+import com.loopj.android.http.AsyncHttpClient;
+import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-
-import cz.msebera.android.httpclient.HttpEntity;
-import cz.msebera.android.httpclient.HttpResponse;
-import cz.msebera.android.httpclient.client.ClientProtocolException;
-import cz.msebera.android.httpclient.client.HttpClient;
-import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.Header;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class GoogleFragment extends Fragment{
-
+    private static final String TAGSESSIONE = "lastSessio";
     private MapView mMapView;
     private GoogleMap google;
     private String sessione;
     private String url = "http://its-bitrace.herokuapp.com/api/v2/stores";
-    private String header = "x-bitrace-session";
+    private static final String HEADER = "x-bitrace-session";
     private JSONArray jsonArray;
+    private JSONObject jObject;
+    private String response;
 
 
     public GoogleFragment() {
@@ -76,7 +69,6 @@ public class GoogleFragment extends Fragment{
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
         google = mMapView.getMap();
-
         try {
             MapsInitializer.initialize(getActivity().getApplicationContext());
         } catch (Exception e) {
@@ -85,78 +77,22 @@ public class GoogleFragment extends Fragment{
 
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
-        
         sessione = getArguments().getString("session");
-        HttpClient client = new DefaultHttpClient();
-        HttpGet request = new HttpGet(url);
-        request.setHeader(header, sessione);
-        HttpResponse response;
-        InputStream inputStream = null;
-        String result = "";
-        try {
-            response = client.execute(request);
-            HttpEntity HttpEntity = response.getEntity();
-            inputStream = HttpEntity.getContent();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"), 8);
-            StringBuilder sb = new StringBuilder();
-            String line = "";
-            while ((line = reader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            result = sb.toString();
-        } catch (NetworkOnMainThreadException e) {
-            e.printStackTrace();
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (inputStream != null)
-                    inputStream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+        if(savedInstanceState != null){
+            if(sessione == savedInstanceState.getString(TAGSESSIONE) && savedInstanceState.getString("response") != null)
+                add2map(savedInstanceState.getString("response"));
+            else
+                Connection(url, sessione);
+        } else {
+            Connection(url, sessione);
         }
 
-        JSONObject jObject = null;
-        try {
-            jObject = new JSONObject(result);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        try {
-
-            if(jObject.getBoolean("success")){
-                jsonArray = jObject.getJSONArray("data");
-                if(jsonArray.length() > 0){
-                    for (int i = 0; i < jsonArray.length(); i++) {
-
-                        try {
-                            JSONObject oneObject = jsonArray.getJSONObject(i);
-
-                            google.addMarker( new MarkerOptions().position(
-                                            new LatLng(oneObject.getDouble("latitude"), oneObject.getDouble("longitude"))).title(oneObject.getString("name")).draggable(true)
-                            );
-                            Log.d("TAG",oneObject.getDouble("latitude") + " " +  oneObject.getDouble("longitude"));
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
         google.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 
             @Override
             public void onInfoWindowClick(Marker marker) {
                 Intent intent = new Intent(getActivity(), DetailsActivity.class);
                 Bundle bundle = new Bundle();
-
                 bundle.putString("session", sessione);
                 try {
                     String id = marker.getId();
@@ -165,7 +101,6 @@ public class GoogleFragment extends Fragment{
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
@@ -173,8 +108,55 @@ public class GoogleFragment extends Fragment{
         return view;
     }
 
+    public void add2map(String response){
+        try {
+            jObject = new JSONObject(response);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        try {
+            if(jObject.getBoolean("success")){
+                jsonArray = jObject.getJSONArray("data");
+                if(jsonArray.length() > 0){
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        try {
+                            JSONObject oneObject = jsonArray.getJSONObject(i);
+                            google.addMarker(new MarkerOptions().position(
+                                            new LatLng(oneObject.getDouble("latitude"), oneObject.getDouble("longitude"))).title(oneObject.getString("name")).snippet(
+                                            "Phone: " + oneObject.getString("phone")).draggable(true)
+                            );
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            } else {
+                Toast toast = Toast.makeText(getActivity(), jObject.getString("error"), Toast.LENGTH_SHORT);
+                toast.show();
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void Connection(String url, String session){
 
+        AsyncHttpClient client = new AsyncHttpClient();
+        client.addHeader(HEADER, session);
+        client.get(url, new AsyncHttpResponseHandler() {
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                        response = new String(responseBody);
+                        add2map(response);
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+                         Toast.makeText(getActivity(), "Problemi di connessione", Toast.LENGTH_SHORT).show();
+                    }
+                }
+        );
+    }
 
     @Override
     public void onStart() {
@@ -189,6 +171,8 @@ public class GoogleFragment extends Fragment{
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        outState.putString(TAGSESSIONE, sessione);
+        outState.putString("response", response);
     }
 
     @Override
