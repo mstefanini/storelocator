@@ -135,7 +135,7 @@ public class StoreList extends Fragment {
     public void onAttach(Context context) {
         super.onAttach(context);
 
-        Context vHostActivity = getContext();
+        Context vHostActivity = getActivity();
         if(vHostActivity instanceof ResponseList) {
             iResponseList = (ResponseList) vHostActivity;
         }
