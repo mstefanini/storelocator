@@ -108,9 +108,10 @@ public class GoogleFragment extends Fragment{
         return view;
     }
 
-    public void add2map(String response){
+    public void add2map(String respons){
+        response = respons;
         try {
-            jObject = new JSONObject(response);
+            jObject = new JSONObject(respons);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -146,8 +147,8 @@ public class GoogleFragment extends Fragment{
         client.get(url, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        response = new String(responseBody);
-                        add2map(response);
+                        //response = new String(responseBody);
+                        add2map(new String(responseBody));
                     }
 
                     @Override
