@@ -54,7 +54,7 @@ public class Form_fragment extends Fragment {
         // Required empty public constructor
     }
 
-    public static Form_fragment newInstance() {
+    public static Form_fragment newInstance() {             
         Form_fragment fragment = new Form_fragment();
         return fragment;
     }
@@ -67,7 +67,7 @@ public class Form_fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_form_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_form_fragment, container, false);    //vengono recuperati gli oggetti dalla view
         final EditText email = (EditText)view.findViewById(R.id.email);
         final EditText pswd = (EditText)view.findViewById(R.id.pswd);
         Button button = (Button)view.findViewById(R.id.button);
@@ -82,7 +82,7 @@ public class Form_fragment extends Fragment {
                         md.update(pswd.getText().toString().getBytes());
                         byte byteData[] = md.digest();
                         String base64 = Base64.encodeToString(byteData, Base64.DEFAULT);
-                        request(base64.replace("\n", ""), email.getText().toString(), getContext());  //getContext è API 23
+                        request(base64.replace("\n", ""), email.getText().toString(), getContext());  //getContext è API 23  //esegue la richiesta della chiave di sessione dopo aver criptato la pswd(?)
                     } else {
                         requestError();
                     }
@@ -96,28 +96,28 @@ public class Form_fragment extends Fragment {
         return view;
     }
 
-    public void request(String psw, String email, final Context context){
+    public void request(String psw, String email, final Context context){               //crea la richiesta da inviare
         AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
         asyncHttpClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
         RequestParams requestParams = new RequestParams();
         requestParams.add("email", email);
         requestParams.add("password", psw);
-        asyncHttpClient.post(url, requestParams, new AsyncHttpResponseHandler() {
+        asyncHttpClient.post(url, requestParams, new AsyncHttpResponseHandler() {       //esegue la richiesta di post con i parametri
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Boolean success;
                 try{
-                    JSONObject jsonObject = new JSONObject(new String(responseBody));
+                    JSONObject jsonObject = new JSONObject(new String(responseBody));           //trasforma il body della risposta in un jsonObj
                     Log.d("Prova", jsonObject.toString());
-                    if((success = jsonObject.getBoolean("success"))){
+                    if((success = jsonObject.getBoolean("success"))){                           //se la richiesta è andata a buon fine ("success")
                         Toast.makeText(getContext(), "SUCCESS TRUE", Toast.LENGTH_LONG).show();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(SESSTAG, jsonObject.getJSONObject("data").getString("session"));
-                        Intent intent = new Intent(getContext(), MainActivity.class);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
+                        Bundle bundle = new Bundle();                                           //viene creato un bundle
+                        bundle.putString(SESSTAG, jsonObject.getJSONObject("data").getString("session"));   //viene aggiunto al bundle da passare la chiave di sessione recuperata dal jsonObj
+                        Intent intent = new Intent(getContext(), MainActivity.class);           //creato l'intent
+                        intent.putExtras(bundle);                                               //viene aggiunto il bundle all'intent
+                        startActivity(intent);                                                  //viene passato alla nuova activity l'intent
                     }else{
-                        Toast.makeText(getContext(), "SUCCESS FALSE", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getContext(), "SUCCESS FALSE", Toast.LENGTH_LONG).show();    //popUp - con success o error
                     }
                 }catch (JSONException e){
                     Toast.makeText(getContext(), "Error on jsonObject", Toast.LENGTH_LONG).show();

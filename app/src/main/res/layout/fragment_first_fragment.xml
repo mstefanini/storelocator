@@ -1,7 +1,7 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/grey"
+    android:background="@drawable/sfondo"
    >
 
 
@@ -11,5 +11,7 @@
         android:layout_height="167dp"
         android:id="@+id/imageButton"
         android:layout_gravity="center"
-        android:background="@drawable/jessecerchio" />
+        android:background="@drawable/jessecerchio"
+        android:clickable="true"
+        android:src="@drawable/ripple" />
 </FrameLayout>

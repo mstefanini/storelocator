@@ -20,10 +20,10 @@ public class LoginActivity extends Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+        setContentView(R.layout.activity_login);   //carica il layout associato alla activity
 
         if( (first_fragment = (First_fragment) fragmentManager.findFragmentByTag(FragTag)) == null){
-            first_fragment = First_fragment.newInstance();
+            first_fragment = First_fragment.newInstance();      //se non esiste ancora il fragment di firstfragment lo inizializza
             fragmentManager.beginTransaction()
                     .add(R.id.fragment_frame, first_fragment, FragTag)
                     .commit();
@@ -32,8 +32,8 @@ public class LoginActivity extends Activity
 
     @Override
     public void onFragmentInteraction() {
-        form_fragment = Form_fragment.newInstance();
-        fragmentManager.beginTransaction()
+        form_fragment = Form_fragment.newInstance();    //crea l'istanza del form fragment
+        fragmentManager.beginTransaction()              //switch da first_fragment a form_fragment
                 .replace(R.id.fragment_frame, form_fragment, FragTag2)
                 .commit();
     }

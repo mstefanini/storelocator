@@ -39,14 +39,14 @@ public class First_fragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_first_fragment, container, false);
-        ImageButton imgBtn = (ImageButton)view.findViewById(R.id.imageButton);
+        View view = inflater.inflate(R.layout.fragment_first_fragment, container, false ); //recupera gli elementi della view
+        ImageButton imgBtn = (ImageButton)view.findViewById(R.id.imageButton);  //recupero imgbtn
         imgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mListener.onFragmentInteraction();
             }
-        });
+        }); //associo al bottone il listner
         return view;
     }
 
@@ -64,7 +64,7 @@ public class First_fragment extends Fragment {
     @Override
     public void onDetach() {
         super.onDetach();
-        mListener = null;
+        mListener = null;   //dissocia il listner liberando memoria
     }
 
     /**
