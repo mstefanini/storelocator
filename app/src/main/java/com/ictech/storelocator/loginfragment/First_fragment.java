@@ -40,10 +40,11 @@ public class First_fragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_first_fragment, container, false ); //recupera gli elementi della view
-        ImageButton imgBtn = (ImageButton)view.findViewById(R.id.imageButton);  //recupero imgbtn
+        final ImageButton imgBtn = (ImageButton)view.findViewById(R.id.imageButton);  //recupero imgbtn
         imgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                imgBtn.setBackgroundResource(R.drawable.jessecerchiopremuto);
                 mListener.onFragmentInteraction();
             }
         }); //associo al bottone il listner

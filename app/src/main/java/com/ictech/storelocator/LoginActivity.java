@@ -2,6 +2,7 @@ package com.ictech.storelocator;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.os.Bundle;
 
 import com.ictech.storelocator.loginfragment.First_fragment;
@@ -32,11 +33,32 @@ public class LoginActivity extends Activity
 
     @Override
     public void onFragmentInteraction() {
-        form_fragment = Form_fragment.newInstance();    //crea l'istanza del form fragment
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+
+        form_fragment = Form_fragment.newInstance();
+
+        ft.replace(R.id.fragment_frame, form_fragment, FragTag2);
+        ft.addToBackStack(null);
+// Start the animated transition.
+        ft.commit();
+        /*form_fragment = Form_fragment.newInstance();    //crea l'istanza del form fragment
         fragmentManager.beginTransaction()              //switch da first_fragment a form_fragment
                 .replace(R.id.fragment_frame, form_fragment, FragTag2)
-                .commit();
+                .commit(); */
     }
+
+   /*
+    FragmentTransaction ft = getFragmentManager().beginTransaction();
+ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+
+DetailsFragment newFragment = DetailsFragment.newInstance();
+
+ft.replace(R.id.details_fragment_container, newFragment, "detailFragment");
+
+// Start the animated transition.
+ft.commit();
+ */
 
     @Override
     public void onFromInteraction() {

@@ -66,7 +66,7 @@
             android:layout_marginTop="80dp"
             android:layout_marginBottom="24dp"
             android:padding="12dp"
-            android:background="@drawable/roundedbutton"
+            android:background="@drawable/custombuttonlogin"
             android:textColor="@color/gold"
             android:text="Login" />
 
