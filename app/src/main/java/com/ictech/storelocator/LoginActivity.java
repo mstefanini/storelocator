@@ -34,7 +34,10 @@ public class LoginActivity extends Activity
     @Override
     public void onFragmentInteraction() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right);
+        ft.setCustomAnimations(R.anim.slide_in_left, R.anim.slide_out_right, R.anim.slide_in_right, R.anim.slide_out_left);
+
+        //ft.setCustomAnimations(R.anim.slide_in, R.anim.hyperspace_out, R.anim.hyperspace_in, R.anim.slide_out );
+
 
         form_fragment = Form_fragment.newInstance();
 
