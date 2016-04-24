@@ -1,7 +1,6 @@
 package com.ictech.storelocator.loginfragment;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.app.Fragment;
 import android.view.LayoutInflater;

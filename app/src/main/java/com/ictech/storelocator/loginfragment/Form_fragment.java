@@ -114,6 +114,7 @@ public class Form_fragment extends Fragment {
                         Bundle bundle = new Bundle();                                           //viene creato un bundle
                         bundle.putString(SESSTAG, jsonObject.getJSONObject("data").getString("session"));   //viene aggiunto al bundle da passare la chiave di sessione recuperata dal jsonObj
                         Intent intent = new Intent(getContext(), MainActivity.class);           //creato l'intent
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtras(bundle);                                               //viene aggiunto il bundle all'intent
                         startActivity(intent);                                                  //viene passato alla nuova activity l'intent
                     }else{
