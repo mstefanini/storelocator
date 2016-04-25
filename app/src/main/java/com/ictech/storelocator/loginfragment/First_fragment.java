@@ -43,6 +43,19 @@ public class First_fragment extends Fragment {
         imgBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                /* Drawable backgrounds[] = new Drawable[2];
+        Resources res = getResources();
+        backgrounds[0] = res.getDrawable(android.R.drawable.btn_star_big_on);
+        backgrounds[1] = res.getDrawable(android.R.drawable.btn_star_big_off);
+
+        TransitionDrawable crossfader = new TransitionDrawable(backgrounds);
+
+        ImageView image = (ImageView)findViewById(R.id.image);
+        image.setImageDrawable(crossfader);
+
+        crossfader.startTransition(3000);
+
+*/
                 imgBtn.setBackgroundResource(R.drawable.jessecerchiopremuto);
                 mListener.onFragmentInteraction();
             }

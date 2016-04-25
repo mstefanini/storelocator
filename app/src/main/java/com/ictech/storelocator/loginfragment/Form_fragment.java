@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.ictech.storelocator.MainActivity;
@@ -70,6 +71,7 @@ public class Form_fragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_form_fragment, container, false);    //vengono recuperati gli oggetti dalla view
         final EditText email = (EditText)view.findViewById(R.id.email);
         final EditText pswd = (EditText)view.findViewById(R.id.pswd);
+
         Button button = (Button)view.findViewById(R.id.button);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -82,7 +84,7 @@ public class Form_fragment extends Fragment {
                         md.update(pswd.getText().toString().getBytes());
                         byte byteData[] = md.digest();
                         String base64 = Base64.encodeToString(byteData, Base64.DEFAULT);
-                        request(base64.replace("\n", ""), email.getText().toString(), getContext());  //getContext è API 23  //esegue la richiesta della chiave di sessione dopo aver criptato la pswd(?)
+                        request(base64.replace("\n", ""), email.getText().toString(), getActivity());  //getContext è API 23  //esegue la richiesta della chiave di sessione dopo aver criptato la pswd(?)
                     } else {
                         requestError();
                     }
@@ -110,18 +112,18 @@ public class Form_fragment extends Fragment {
                     JSONObject jsonObject = new JSONObject(new String(responseBody));           //trasforma il body della risposta in un jsonObj
                     Log.d("Prova", jsonObject.toString());
                     if((success = jsonObject.getBoolean("success"))){                           //se la richiesta è andata a buon fine ("success")
-                        Toast.makeText(getContext(), "SUCCESS TRUE", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "SUCCESS TRUE", Toast.LENGTH_LONG).show();
                         Bundle bundle = new Bundle();                                           //viene creato un bundle
                         bundle.putString(SESSTAG, jsonObject.getJSONObject("data").getString("session"));   //viene aggiunto al bundle da passare la chiave di sessione recuperata dal jsonObj
-                        Intent intent = new Intent(getContext(), MainActivity.class);           //creato l'intent
+                        Intent intent = new Intent(getActivity(), MainActivity.class);           //creato l'intent
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtras(bundle);                                               //viene aggiunto il bundle all'intent
                         startActivity(intent);                                                  //viene passato alla nuova activity l'intent
                     }else{
-                        Toast.makeText(getContext(), "SUCCESS FALSE", Toast.LENGTH_LONG).show();    //popUp - con success o error
+                        Toast.makeText(getActivity(), "SUCCESS FALSE", Toast.LENGTH_LONG).show();    //popUp - con success o error
                     }
                 }catch (JSONException e){
-                    Toast.makeText(getContext(), "Error on jsonObject", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "Error on jsonObject", Toast.LENGTH_LONG).show();
                 }
             }
 
