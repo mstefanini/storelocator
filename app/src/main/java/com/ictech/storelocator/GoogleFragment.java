@@ -79,7 +79,7 @@ public class GoogleFragment extends Fragment{
         StrictMode.setThreadPolicy(policy);
         sessione = getArguments().getString("session");
         if(savedInstanceState != null){
-            if(sessione == savedInstanceState.getString(TAGSESSIONE) && savedInstanceState.getString("response") != null)
+            if(savedInstanceState.getString(TAGSESSIONE).equals(sessione) && savedInstanceState.getString("response") != null)
                 add2map(savedInstanceState.getString("response"));
             else
                 Connection(url, sessione);
@@ -140,20 +140,33 @@ public class GoogleFragment extends Fragment{
         }
     }
 
-    public void Connection(String url, String session){
+    public void Connection(String URL, String session){
 
         AsyncHttpClient client = new AsyncHttpClient();
         client.addHeader(HEADER, session);
-        client.get(url, new AsyncHttpResponseHandler() {
+        client.get(URL, new AsyncHttpResponseHandler() {
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
-                        //response = new String(responseBody);
-                        add2map(new String(responseBody));
+                        response = new String(responseBody);
+                        add2map(response);
                     }
 
                     @Override
                     public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
                          Toast.makeText(getActivity(), "Problemi di connessione", Toast.LENGTH_SHORT).show();
+                        int seconds = 3;
+                        long startTime = System.currentTimeMillis();
+                        long endTime = System.currentTimeMillis() + (seconds * 1000);
+                        long temp = startTime + 1000 ;
+                        while (startTime < endTime) {
+                            if (startTime == temp) {
+                                seconds--;
+                                temp += 1000;
+                            }
+                            startTime = System.currentTimeMillis();
+                        }
+                        Connection(url, sessione);
+
                     }
                 }
         );
