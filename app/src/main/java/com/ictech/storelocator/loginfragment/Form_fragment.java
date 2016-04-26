@@ -1,5 +1,4 @@
 package com.ictech.storelocator.loginfragment;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -14,7 +13,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
-
+import android.content.Intent;
 import com.ictech.storelocator.MainActivity;
 import com.ictech.storelocator.R;
 import com.loopj.android.http.AsyncHttpClient;
@@ -98,29 +97,35 @@ public class Form_fragment extends Fragment {
         return view;
     }
 
-    public void request(String psw, String email, final Context context){               //crea la richiesta da inviare
+    public void request(String psw, String email, final Context context){
         AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
         asyncHttpClient.addHeader("Content-Type", "application/x-www-form-urlencoded");
         RequestParams requestParams = new RequestParams();
         requestParams.add("email", email);
         requestParams.add("password", psw);
-        asyncHttpClient.post(url, requestParams, new AsyncHttpResponseHandler() {       //esegue la richiesta di post con i parametri
+        asyncHttpClient.post(url, requestParams, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
                 Boolean success;
                 try{
-                    JSONObject jsonObject = new JSONObject(new String(responseBody));           //trasforma il body della risposta in un jsonObj
+                    JSONObject jsonObject = new JSONObject(new String(responseBody));
                     Log.d("Prova", jsonObject.toString());
-                    if((success = jsonObject.getBoolean("success"))){                           //se la richiesta è andata a buon fine ("success")
+                    if((success = jsonObject.getBoolean("success"))){
                         Toast.makeText(getActivity(), "SUCCESS TRUE", Toast.LENGTH_LONG).show();
-                        Bundle bundle = new Bundle();                                           //viene creato un bundle
-                        bundle.putString(SESSTAG, jsonObject.getJSONObject("data").getString("session"));   //viene aggiunto al bundle da passare la chiave di sessione recuperata dal jsonObj
-                        Intent intent = new Intent(getActivity(), MainActivity.class);           //creato l'intent
+                        Bundle bundle = new Bundle();
+                        bundle.putString(SESSTAG, jsonObject.getJSONObject("data").getString("session"));
+                        Intent intent = new Intent(getActivity(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                        intent.putExtras(bundle);                                               //viene aggiunto il bundle all'intent
-                        startActivity(intent);                                                  //viene passato alla nuova activity l'intent
+                        intent.putExtras(bundle);
+
+                        startActivity(intent);
+
+
+
+
+
                     }else{
-                        Toast.makeText(getActivity(), "SUCCESS FALSE", Toast.LENGTH_LONG).show();    //popUp - con success o error
+                        Toast.makeText(getActivity(), "SUCCESS FALSE", Toast.LENGTH_LONG).show();
                     }
                 }catch (JSONException e){
                     Toast.makeText(getActivity(), "Error on jsonObject", Toast.LENGTH_LONG).show();
@@ -139,6 +144,7 @@ public class Form_fragment extends Fragment {
     }
 
 
+
     @Override
     public void onAttach(Activity context) {
         super.onAttach(context);
@@ -155,6 +161,14 @@ public class Form_fragment extends Fragment {
         super.onDetach();
         mListener = null;
     }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+
+
+    }
+
 
     /**
      * This interface must be implemented by activities that contain this
