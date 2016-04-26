@@ -91,7 +91,7 @@ public class GoogleFragment extends Fragment{
 
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                //Intent intent = new Intent(getActivity(), DetailsActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("session", sessione);
                 try {
@@ -101,12 +101,14 @@ public class GoogleFragment extends Fragment{
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                intent.putExtras(bundle);
-                startActivity(intent);
+                //intent.putExtras(bundle);
+                //startActivity(intent);
             }
+
         });
         return view;
     }
+
 
     public void add2map(String respons){
         response = respons;

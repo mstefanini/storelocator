@@ -43,7 +43,7 @@ public class LoginActivity extends Activity
 
         ft.replace(R.id.fragment_frame, form_fragment, FragTag2);
         ft.addToBackStack(null);
-// Start the animated transition.
+        // Start the animated transition.
         ft.commit();
         /*form_fragment = Form_fragment.newInstance();    //crea l'istanza del form fragment
         fragmentManager.beginTransaction()              //switch da first_fragment a form_fragment
