@@ -57,6 +57,14 @@ public class MainActivity extends Activity {
 
         googleFragment = GoogleFragment.newInstance(session);
         storeList = StoreList.newInstance(session);
+        Bundle bundle = new Bundle();
+        bundle.putString(SESSTAG, session);
+        storeList.setArguments(bundle);
+        googleFragment.setArguments(bundle);
+
+        fragmentManager.beginTransaction()
+                .add(R.id.frame, storeList, ELENCO)
+                .commit();
 
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override
