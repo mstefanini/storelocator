@@ -48,12 +48,7 @@ public class MainActivity extends Activity {
         bottomNavigation.addItem(home);
         bottomNavigation.addItem(map);
 
-        if(savedInstanceState != null) {
-            session = savedInstanceState.getString(SESSTAG);
-            bottomNavigation.setCurrentItem(savedInstanceState.getInt(CURRENTITEM));
-        }else{
-            bottomNavigation.setCurrentItem(0);
-        }
+
 
         googleFragment = GoogleFragment.newInstance(session);
         storeList = StoreList.newInstance(session);
@@ -62,9 +57,19 @@ public class MainActivity extends Activity {
         storeList.setArguments(bundle);
         googleFragment.setArguments(bundle);
 
-        fragmentManager.beginTransaction()
-                .add(R.id.frame, storeList, ELENCO)
-                .commit();
+        if(savedInstanceState != null) {
+            session = savedInstanceState.getString(SESSTAG);
+            bottomNavigation.setCurrentItem(savedInstanceState.getInt(CURRENTITEM));
+        }else{
+            fragmentManager.beginTransaction()
+                    .add(R.id.frame, storeList, ELENCO)
+                    .commit();
+            bottomNavigation.setCurrentItem(0);
+        }
+
+
+
+
 
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override

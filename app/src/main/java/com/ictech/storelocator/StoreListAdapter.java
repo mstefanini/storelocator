@@ -57,7 +57,7 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Negozio negozio = new ArrayList<Negozio>().get(position);
+        Negozio negozio = arrayList.get(position);
         holder.storeName.setText(negozio.nome);
         //Picasso.with(mContext).load(negozio.getImageResourceId(mContext)).into(holder.storeImage);
     }
