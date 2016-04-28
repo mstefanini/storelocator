@@ -104,8 +104,6 @@ public class StoreList extends Fragment {
                             element.indirizzo = jsonObject.getJSONArray("data").getJSONObject(i).getString("address");
                             element.telefono = jsonObject.getJSONArray("data").getJSONObject(i).getString("phone");
                             listShop.add(element);
-                            //mAdapter.notifyItemChanged(i);
-
                         }
                     }
                 }catch (Exception e){

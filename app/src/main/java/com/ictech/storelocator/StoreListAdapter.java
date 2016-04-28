@@ -2,11 +2,13 @@ package com.ictech.storelocator;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.ictech.storelocator.R;
@@ -28,16 +30,12 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.View
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public LinearLayout storeHolder;
-        public LinearLayout storeNameHolder;
         public TextView storeName;
         public ImageView storeImage;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            storeHolder = (LinearLayout) itemView.findViewById(R.id.mainHolder);
             storeName = (TextView) itemView.findViewById(R.id.storeName);
-            storeNameHolder = (LinearLayout) itemView.findViewById(R.id.storeNameHolder);
             storeImage = (ImageView) itemView.findViewById(R.id.storeImage);
         }
     }
@@ -58,8 +56,9 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         Negozio negozio = arrayList.get(position);
-        holder.storeName.setText(negozio.nome);
-        //Picasso.with(mContext).load(negozio.getImageResourceId(mContext)).into(holder.storeImage);
+        Log.d("bind", negozio.nome);
+        holder.storeName.setText(negozio.nome + "\n" + negozio.indirizzo + "\n" + negozio.telefono);
+        holder.storeImage.setImageResource(R.drawable.jessecerchiopremuto);
     }
 }
 
