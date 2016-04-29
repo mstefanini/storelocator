@@ -42,10 +42,12 @@ public class MainActivity extends Activity {
         bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
         AHBottomNavigationItem home = new AHBottomNavigationItem("List", R.drawable.list);
         AHBottomNavigationItem map = new AHBottomNavigationItem("Map", R.drawable.compass);
+        AHBottomNavigationItem user = new AHBottomNavigationItem("Profile", R.drawable.user);
         bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"));
         bottomNavigation.setBehaviorTranslationEnabled(false);
         bottomNavigation.addItem(home);
         bottomNavigation.addItem(map);
+        bottomNavigation.addItem(user);
 
 
 

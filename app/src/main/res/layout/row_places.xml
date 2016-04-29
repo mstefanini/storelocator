@@ -18,19 +18,18 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_margin="5dp"
-            android:layout_marginLeft="3dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
 
             android:id="@+id/storeImage"/>
 
-                   <TextView
-                android:layout_marginLeft="9dp"
-
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/storeName" />
+        <TextView
+            android:layout_marginLeft="9dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/storeName" />
 
 
 

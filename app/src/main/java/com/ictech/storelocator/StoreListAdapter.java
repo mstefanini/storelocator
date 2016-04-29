@@ -57,7 +57,7 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.View
         final Negozio negozio = arrayList.get(position);
         Log.d("bind", negozio.nome);
         holder.storeName.setText(negozio.nome + "\n" + negozio.indirizzo + "\n" + negozio.telefono);
-        holder.storeImage.setImageResource(R.drawable.jessecerchiopremuto);
+        holder.storeImage.setImageResource(R.drawable.logo_list);
         holder.storeImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
