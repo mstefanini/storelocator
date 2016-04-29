@@ -44,14 +44,8 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textTitle"
             android:layout_centerHorizontal="true"
-            android:id="@+id/phoneLayout">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Telefono: "
-                android:id="@+id/textViewPhone" />
+            android:id="@+id/phoneLayout"
+            android:weightSum="1">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -59,30 +53,36 @@
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/textPhone" />
 
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/phoneImage"
+                android:layout_weight="0.04" />
+
         </LinearLayout>
 
         <LinearLayout
             android:orientation="horizontal"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/phoneLayout"
             android:layout_alignParentStart="true"
-            android:id="@+id/addressLayout">
+            android:id="@+id/addressLayout"
+            android:weightSum="1">
 
             <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Indirizzo: "
-                android:id="@+id/textViewAddres" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/textAddress"
                 android:layout_below="@+id/phoneLayout"
-                android:layout_alignEnd="@+id/textTitle" />
+                android:layout_alignEnd="@+id/textTitle"
+                android:layout_weight="0.60" />
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="fill_parent"
+                android:id="@+id/addressImage" />
         </LinearLayout>
 
         <TextView
@@ -157,15 +157,8 @@
             android:layout_centerHorizontal="true"
             android:layout_below="@+id/lContact"
             android:layout_alignParentEnd="true"
-            android:id="@+id/lMail">
-
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="?android:attr/textAppearanceLarge"
-                android:text="Email: "
-                android:id="@+id/textView4"            />
+            android:id="@+id/lMail"
+            android:weightSum="1">
 
 
             <TextView
@@ -175,6 +168,12 @@
                 android:id="@+id/textEmail"
                 android:layout_alignBottom="@+id/textView4"
                 android:layout_toEndOf="@+id/textView4"/>
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:id="@+id/emailImage"
+                android:layout_weight="0.04" />
 
         </LinearLayout>
 
