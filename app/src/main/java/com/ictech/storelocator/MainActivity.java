@@ -40,8 +40,8 @@ public class MainActivity extends Activity {
         }
 
         bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
-        AHBottomNavigationItem home = new AHBottomNavigationItem("Home", R.mipmap.ic_launcher);
-        AHBottomNavigationItem map = new AHBottomNavigationItem("Map", R.mipmap.ic_launcher);
+        AHBottomNavigationItem home = new AHBottomNavigationItem("List", R.drawable.list);
+        AHBottomNavigationItem map = new AHBottomNavigationItem("Map", R.drawable.compass);
         bottomNavigation.setDefaultBackgroundColor(Color.parseColor("#FEFEFE"));
         bottomNavigation.setBehaviorTranslationEnabled(false);
         bottomNavigation.addItem(home);
