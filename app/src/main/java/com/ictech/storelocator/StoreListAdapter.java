@@ -31,12 +31,14 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.View
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView storeName;
+        public TextView storeIndex;
         public ImageView storeImage;
         public CardView cardView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             storeName = (TextView) itemView.findViewById(R.id.storeName);
+            storeIndex = (TextView) itemView.findViewById(R.id.storeIndex);
             storeImage = (ImageView) itemView.findViewById(R.id.storeImage);
             cardView = (CardView) itemView.findViewById(R.id.placeCard);
         }
@@ -58,8 +60,8 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
         final Negozio negozio = arrayList.get(position);
-        Log.d("bind", negozio.nome);
-        holder.storeName.setText(negozio.nome + "\n" + negozio.indirizzo + "\n" + negozio.telefono);
+        holder.storeName.setText(negozio.nome);
+        holder.storeIndex.setText(negozio.indirizzo);
         holder.storeImage.setImageResource(R.drawable.logo_list);
         holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override

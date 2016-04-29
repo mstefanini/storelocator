@@ -5,5 +5,6 @@
         android:valueType="floatType"
         android:valueFrom="0"
         android:valueTo="-1280"
-        android:duration="1500"/>
+        android:duration="1500"
+        android:background="@color/gold"/>
 </set>
