@@ -4,11 +4,10 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/placeCard"
-    android:layout_margin="8dp"
+    android:layout_margin="4dp"
     card_view:cardCornerRadius="@dimen/cardview_default_radius"
     card_view:cardElevation="@dimen/cardview_default_elevation">
 
-    <!-- Used for the ripple effect on touch -->
     <LinearLayout
         android:layout_margin="3dp"
         android:id="@+id/mainHolder"
@@ -18,18 +17,19 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="5dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
 
-            android:id="@+id/storeImage"/>
+            android:id="@+id/storeImage"
+            android:layout_weight="1"
+            android:layout_gravity="center" />
 
         <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:orientation="vertical">
+            android:layout_width="130dp"
+            android:layout_height="60dp"
+            android:orientation="vertical"
+            android:layout_weight="3"
+            android:layout_gravity="center">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -45,6 +45,13 @@
                 android:textSize="12sp" />
 
         </LinearLayout>
+
+        <ImageView
+            android:layout_width="25dp"
+            android:layout_height="25dp"
+            android:id="@+id/storePhone"
+            android:layout_weight="1"
+            android:layout_gravity="center" />
 
     </LinearLayout>
 
