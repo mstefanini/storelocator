@@ -10,14 +10,23 @@
     tools:context="com.ictech.storelocator.MainActivity">
 
     <FrameLayout
+        android:background="@drawable/sfondo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_above="@+id/bottom_navigation"
+        android:layout_above="@+id/imageView"
         android:id="@+id/frame">
 
     </FrameLayout>
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageView"
+        android:layout_above="@+id/bottom_navigation"
+        android:background="@drawable/border"/>
 
     <com.aurelhubert.ahbottomnavigation.AHBottomNavigation
         android:id="@+id/bottom_navigation"

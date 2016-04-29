@@ -7,6 +7,7 @@ public class Negozio {
     protected String nome;
     protected String indirizzo;
     protected String telefono;
+    protected String guid;
 
     public Negozio(){
 

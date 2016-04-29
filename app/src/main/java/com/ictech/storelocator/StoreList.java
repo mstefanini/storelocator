@@ -69,7 +69,7 @@ public class StoreList extends Fragment {
         mStaggeredLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mStaggeredLayoutManager);
 
-        mAdapter = new StoreListAdapter(getActivity(), listShop);
+        mAdapter = new StoreListAdapter(getActivity(), listShop, stringa);
         mRecyclerView.setAdapter(mAdapter);
         richiesta(stringa);
 
@@ -96,6 +96,7 @@ public class StoreList extends Fragment {
                             element.nome = jsonObject.getJSONArray("data").getJSONObject(i).getString("name");
                             element.indirizzo = jsonObject.getJSONArray("data").getJSONObject(i).getString("address");
                             element.telefono = jsonObject.getJSONArray("data").getJSONObject(i).getString("phone");
+                            element.guid = jsonObject.getJSONArray("data").getJSONObject(i).getString("guid");
                             listShop.add(element);
                         }
                     }

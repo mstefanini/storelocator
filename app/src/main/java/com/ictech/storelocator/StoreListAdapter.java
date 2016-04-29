@@ -1,6 +1,8 @@
 package com.ictech.storelocator;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -17,10 +19,12 @@ import java.util.ArrayList;
 public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.ViewHolder>{
     Context mContext;
     ArrayList<Negozio> arrayList;
+    String session;
 
-    public StoreListAdapter(Context context, ArrayList<Negozio> arrayList) {
+    public StoreListAdapter(Context context, ArrayList<Negozio> arrayList, String session) {
         this.mContext = context;
         this.arrayList = arrayList;
+        this.session = session;
 
     }
 
@@ -50,10 +54,21 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-        Negozio negozio = arrayList.get(position);
+        final Negozio negozio = arrayList.get(position);
         Log.d("bind", negozio.nome);
         holder.storeName.setText(negozio.nome + "\n" + negozio.indirizzo + "\n" + negozio.telefono);
         holder.storeImage.setImageResource(R.drawable.jessecerchiopremuto);
+        holder.storeImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), DetailsActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("guid", negozio.guid);
+                bundle.putString("session", session);
+                intent.putExtras(bundle);
+                view.getContext().startActivity(intent);
+            }
+        });
     }
 }
 
