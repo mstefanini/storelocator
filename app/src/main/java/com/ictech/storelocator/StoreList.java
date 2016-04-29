@@ -1,6 +1,5 @@
 package com.ictech.storelocator;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -11,15 +10,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.TextView;
 
-import com.ictech.storelocator.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.RequestParams;
 
-import org.json.JSONException;
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -37,11 +32,7 @@ public class StoreList extends Fragment {
     private Negozio mNegozio;
     private StoreListAdapter mAdapter;
     private ArrayList<Negozio> listShop = new ArrayList<>();
-    private static final String LISTA = "elenco_store";
-
-    //TODO
-    //inizializzo la variabile come Object generico intanto
-    Object mList;
+    private static final String SESSION = "session";
 
     public StoreList() {
 
@@ -50,14 +41,13 @@ public class StoreList extends Fragment {
     public static StoreList newInstance(String string){
         StoreList fragment = new StoreList();
         Bundle bundle = new Bundle();
-        bundle.putString(LISTA, string);
+        bundle.putString(SESSION, string);
         fragment.setArguments(bundle);
         return fragment;
     }
 
 
     public interface ResponseList {
-        //TODO: implementa interfaccia al fragment elenco store
         void updateList();
     }
 
@@ -65,30 +55,63 @@ public class StoreList extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View vView = inflater.inflate(R.layout.content_list_frame,container,false);
+        View vView = inflater.inflate(R.layout.content_list_frame, container, false);
+        String stringa = null;
+        Bundle bundle;
+        if((bundle = getArguments()) != null)
+            stringa = bundle.getString(SESSION);
 
         if(savedInstanceState != null){
-            mList = savedInstanceState.get(LISTA);
+            stringa = savedInstanceState.getString(SESSION);
         }
 
-        mRecyclerView = (RecyclerView) (vView.findViewById(R.id.list));
+        mRecyclerView = (RecyclerView)vView.findViewById(R.id.list);
         mStaggeredLayoutManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(mStaggeredLayoutManager);
 
-        richiesta();
-
         mAdapter = new StoreListAdapter(getActivity(), listShop);
         mRecyclerView.setAdapter(mAdapter);
+        richiesta(stringa);
 
         return vView;
     }
 
-    public void richiesta(){
-        RequestParams params = new RequestParams();
+    public void richiesta(String string){
         AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-        asyncHttpClient.addHeader("x-bitrace-session", "12dcac5c-6bde-407a-813d-41da7a36999a");
+        asyncHttpClient.addHeader("x-bitrace-session", string);
 
-        asyncHttpClient.get("http://its-bitrace.herokuapp.com/api/v2/stores", params, new AsyncHttpResponseHandler() {
+        asyncHttpClient.get("http://its-bitrace.herokuapp.com/api/v2/stores", new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
+                try{
+                    JSONObject jsonObject = new JSONObject(new String(responseBody));
+                    boolean success;
+                    if((success = jsonObject.getBoolean("success"))){
+                        Log.d("prova", "siamo riusciti ad entrare! ");
+                        Log.d("prova", ""+jsonObject.getJSONArray("data").length());
+                        JSONArray jsonArray = jsonObject.getJSONArray("data");
+                        int length = jsonArray.length();
+                        for (int i = 0; i < length; ++i) {
+                            Negozio element = new Negozio();
+                            element.nome = jsonObject.getJSONArray("data").getJSONObject(i).getString("name");
+                            element.indirizzo = jsonObject.getJSONArray("data").getJSONObject(i).getString("address");
+                            element.telefono = jsonObject.getJSONArray("data").getJSONObject(i).getString("phone");
+                            listShop.add(element);
+                        }
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                mAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, byte[] responseBody, Throwable error) {
+
+            }
+        });
+
+        /*asyncHttpClient.get("", new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, byte[] responseBody) {
 
@@ -101,16 +124,19 @@ public class StoreList extends Fragment {
                     Log.d("Vidu", "" + jsonObject.getBoolean("success"));
 
                     Negozio element = new Negozio();
-                    for(int i = 0; i<jsonObject.getJSONArray("data").length(); i++){
+                    if (success) {
+                        for (int i = 0; i < jsonObject.getJSONArray("data").length(); i++) {
 
-                        element.nome = jsonObject.getJSONArray("data").getJSONObject(i).getString("name");
-                        element.indirizzo = jsonObject.getJSONArray("data").getJSONObject(i).getString("address");
-                        element.telefono = jsonObject.getJSONArray("data").getJSONObject(i).getString("phone");
-                        listShop.add(element);
-                        mAdapter.notifyItemChanged(i);
+                            element.nome = jsonObject.getJSONArray("data").getJSONObject(i).getString("name");
+                            element.indirizzo = jsonObject.getJSONArray("data").getJSONObject(i).getString("address");
+                            element.telefono = jsonObject.getJSONArray("data").getJSONObject(i).getString("phone");
+                            listShop.add(element);
+                            //mAdapter.notifyItemChanged(i);
+                            mAdapter.notifyAll();
+                        }
+                        //jsonObject.getJSONArray("data").getJSONObject(0).getString("phone");
+                        Log.d("Vidu", "jhkjhkjh" + jsonObject.getJSONArray("data").getJSONObject(0).getString("phone"));
                     }
-                    //jsonObject.getJSONArray("data").getJSONObject(0).getString("phone");
-                    Log.d("Vidu", "jhkjhkjh" + jsonObject.getJSONArray("data").getJSONObject(0).getString("phone"));
 
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -122,7 +148,7 @@ public class StoreList extends Fragment {
                 error.printStackTrace();
 
             }
-        });
+        });*/
     }
 
     public void vadoSuLista(){

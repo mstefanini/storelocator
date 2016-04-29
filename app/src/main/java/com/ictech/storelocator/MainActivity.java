@@ -2,7 +2,6 @@ package com.ictech.storelocator;
 
 import android.app.Activity;
 import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -48,15 +47,28 @@ public class MainActivity extends Activity {
         bottomNavigation.addItem(home);
         bottomNavigation.addItem(map);
 
+
+
+        googleFragment = GoogleFragment.newInstance(session);
+        storeList = StoreList.newInstance(session);
+        Bundle bundle = new Bundle();
+        bundle.putString(SESSTAG, session);
+        storeList.setArguments(bundle);
+        googleFragment.setArguments(bundle);
+
         if(savedInstanceState != null) {
             session = savedInstanceState.getString(SESSTAG);
             bottomNavigation.setCurrentItem(savedInstanceState.getInt(CURRENTITEM));
         }else{
+            fragmentManager.beginTransaction()
+                    .add(R.id.frame, storeList, ELENCO)
+                    .commit();
             bottomNavigation.setCurrentItem(0);
         }
 
-        googleFragment = GoogleFragment.newInstance(session);
-        storeList = StoreList.newInstance(session);
+
+
+
 
         bottomNavigation.setOnTabSelectedListener(new AHBottomNavigation.OnTabSelectedListener() {
             @Override

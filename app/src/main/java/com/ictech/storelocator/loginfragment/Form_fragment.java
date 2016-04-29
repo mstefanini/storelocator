@@ -1,9 +1,9 @@
 package com.ictech.storelocator.loginfragment;
 import android.app.Activity;
+import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.app.Fragment;
 import android.util.Base64;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,27 +11,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.Toast;
-import android.content.Intent;
+
 import com.ictech.storelocator.MainActivity;
 import com.ictech.storelocator.R;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
-import com.loopj.android.http.FileAsyncHttpResponseHandler;
 import com.loopj.android.http.RequestParams;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-
-import javax.microedition.khronos.egl.EGLDisplay;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -111,7 +103,7 @@ public class Form_fragment extends Fragment {
                     JSONObject jsonObject = new JSONObject(new String(responseBody));
                     Log.d("Prova", jsonObject.toString());
                     if((success = jsonObject.getBoolean("success"))){
-                        Toast.makeText(getActivity(), "SUCCESS TRUE", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Benvenuto in Jesse!", Toast.LENGTH_LONG).show();
                         Bundle bundle = new Bundle();
                         bundle.putString(SESSTAG, jsonObject.getJSONObject("data").getString("session"));
                         Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -121,11 +113,8 @@ public class Form_fragment extends Fragment {
                         startActivity(intent);
 
 
-
-
-
                     }else{
-                        Toast.makeText(getActivity(), "SUCCESS FALSE", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Qualcosa è andato storto, riprova", Toast.LENGTH_LONG).show();
                     }
                 }catch (JSONException e){
                     Toast.makeText(getActivity(), "Error on jsonObject", Toast.LENGTH_LONG).show();
@@ -181,7 +170,6 @@ public class Form_fragment extends Fragment {
      * >Communicating with Other Fragments</a> for more information.
      */
     public interface OnFromInteraction {
-        // TODO: Update argument type and name
         void onFromInteraction();
     }
 }

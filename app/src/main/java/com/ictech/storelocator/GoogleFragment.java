@@ -104,6 +104,7 @@ public class GoogleFragment extends Fragment{
                 intent.putExtras(bundle);
                 startActivity(intent);
             }
+
         });
         return view;
     }

@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/textTitle"
             android:layout_centerHorizontal="true"
-            android:id="@+id/linearLayout">
+            android:id="@+id/phoneLayout">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -65,9 +65,9 @@
             android:orientation="horizontal"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/linearLayout"
+            android:layout_below="@+id/phoneLayout"
             android:layout_alignParentStart="true"
-            android:id="@+id/linearLayout2">
+            android:id="@+id/addressLayout">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -81,7 +81,7 @@
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceLarge"
                 android:id="@+id/textAddress"
-                android:layout_below="@+id/linearLayout"
+                android:layout_below="@+id/phoneLayout"
                 android:layout_alignEnd="@+id/textTitle" />
         </LinearLayout>
 
@@ -91,7 +91,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Descrizione"
             android:id="@+id/textViewDe"
-            android:layout_below="@+id/linearLayout2"
+            android:layout_below="@+id/addressLayout"
             android:layout_centerHorizontal="true" />
 
         <TextView
