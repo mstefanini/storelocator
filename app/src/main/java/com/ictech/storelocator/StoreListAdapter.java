@@ -3,6 +3,7 @@ package com.ictech.storelocator;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -31,11 +32,13 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.View
     public class ViewHolder extends RecyclerView.ViewHolder {
         public TextView storeName;
         public ImageView storeImage;
+        public CardView cardView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             storeName = (TextView) itemView.findViewById(R.id.storeName);
             storeImage = (ImageView) itemView.findViewById(R.id.storeImage);
+            cardView = (CardView) itemView.findViewById(R.id.placeCard);
         }
     }
 
@@ -58,7 +61,7 @@ public class StoreListAdapter extends RecyclerView.Adapter<StoreListAdapter.View
         Log.d("bind", negozio.nome);
         holder.storeName.setText(negozio.nome + "\n" + negozio.indirizzo + "\n" + negozio.telefono);
         holder.storeImage.setImageResource(R.drawable.logo_list);
-        holder.storeImage.setOnClickListener(new View.OnClickListener() {
+        holder.cardView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), DetailsActivity.class);
