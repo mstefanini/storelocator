@@ -111,7 +111,7 @@ public class Form_fragment extends Fragment {
                     JSONObject jsonObject = new JSONObject(new String(responseBody));
                     Log.d("Prova", jsonObject.toString());
                     if((success = jsonObject.getBoolean("success"))){
-                        Toast.makeText(getActivity(), "SUCCESS TRUE", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Benvenuto in Jesse!", Toast.LENGTH_LONG).show();
                         Bundle bundle = new Bundle();
                         bundle.putString(SESSTAG, jsonObject.getJSONObject("data").getString("session"));
                         Intent intent = new Intent(getActivity(), MainActivity.class);
@@ -121,11 +121,8 @@ public class Form_fragment extends Fragment {
                         startActivity(intent);
 
 
-
-
-
                     }else{
-                        Toast.makeText(getActivity(), "SUCCESS FALSE", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "Qualcosa è andato storto, riprova", Toast.LENGTH_LONG).show();
                     }
                 }catch (JSONException e){
                     Toast.makeText(getActivity(), "Error on jsonObject", Toast.LENGTH_LONG).show();

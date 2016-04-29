@@ -36,3 +36,4 @@ captures/
 /.idea/libraries
 .DS_Store
 
+.idea/vcs.xml
