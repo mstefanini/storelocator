@@ -97,7 +97,10 @@ public class DetailsActivity extends Activity {
                             email.setText(jsonObject.getJSONObject("sales_person").getString("email"));
                             ImageView imageView = (ImageView) findViewById(R.id.imageViewDetail);
                             // link img placeholder  Picasso.with(this).load(jsonObject.getString("featured_image")).into(imageView);
-                            Picasso.with(getApplicationContext()).load("https://placeholdit.imgix.net/~text?txtsize=75&txt=800%C3%97800&w=800&h=800").into(imageView);
+                            Picasso.with(getApplicationContext())
+                                    .load("https://placeholdit.imgix.net/~text?txtsize=75&txt=800%C3%97800&w=800&h=800")
+                                    .placeholder(R.drawable.jessecerchiopremuto)
+                                    .into(imageView);
                             JSONArray t = jsonObject.getJSONArray("products");
                             LinearLayout layout = (LinearLayout) findViewById(R.id.products);
                             for (int i = 0; i < t.length(); i++) {
