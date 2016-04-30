@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -41,6 +42,10 @@ public class DetailsActivity extends Activity {
     private TextView persona;
     private TextView description;
     private TextView email;
+    private ImageButton phoneImage;
+    private ImageButton addressImage;
+    private ImageButton emailImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,12 +61,16 @@ public class DetailsActivity extends Activity {
                 sessione = bundle.getString("session");
             }
         }
+
         phone = (TextView) findViewById(R.id.textPhone);
         address = (TextView) findViewById(R.id.textAddress);
         title = (TextView) findViewById(R.id.textTitle);
         description = (TextView) findViewById(R.id.textDescription);
         persona = (TextView) findViewById(R.id.person);
         email = (TextView) findViewById(R.id.textEmail);
+        phoneImage = (ImageButton) findViewById(R.id.phoneImage);
+        addressImage = (ImageButton) findViewById(R.id.addressImage);
+        emailImage = (ImageButton) findViewById(R.id.emailImage);
         AsyncHttpClient client = new AsyncHttpClient();
         client.addHeader(HEADER, sessione);
         client.get(URL + guid, new AsyncHttpResponseHandler() {
@@ -88,9 +97,12 @@ public class DetailsActivity extends Activity {
                             email.setText(jsonObject.getJSONObject("sales_person").getString("email"));
                             ImageView imageView = (ImageView) findViewById(R.id.imageViewDetail);
                             // link img placeholder  Picasso.with(this).load(jsonObject.getString("featured_image")).into(imageView);
-                            Picasso.with(getApplicationContext()).load("https://placeholdit.imgix.net/~text?txtsize=75&txt=800%C3%97800&w=800&h=800").into(imageView);
+                            Picasso.with(getApplicationContext())
+                                    .load("https://placeholdit.imgix.net/~text?txtsize=75&txt=800%C3%97800&w=800&h=800")
+                                    .placeholder(R.drawable.jessecerchiopremuto)
+                                    .into(imageView);
                             JSONArray t = jsonObject.getJSONArray("products");
-                            LinearLayout layout = (LinearLayout)findViewById(R.id.products);
+                            LinearLayout layout = (LinearLayout) findViewById(R.id.products);
                             for (int i = 0; i < t.length(); i++) {
                                 View child = getLayoutInflater().inflate(R.layout.product_view, null);
                                 TextView pName = (TextView) child.findViewById(R.id.productName);
@@ -99,7 +111,7 @@ public class DetailsActivity extends Activity {
                                 pPrice.setText(t.getJSONObject(i).getString("price") + " €");
                                 String Available = "Available";
                                 TextView vAvaible = (TextView) child.findViewById(R.id.available);
-                                if(!t.getJSONObject(i).getBoolean("isAvailable"))
+                                if (!t.getJSONObject(i).getBoolean("isAvailable"))
                                     Available = "Not Available";
                                 vAvaible.setText(" " + Available);
                                 layout.addView(child);
@@ -121,8 +133,7 @@ public class DetailsActivity extends Activity {
             }
         });
 
-        phone.setClickable(true);
-        phone.setOnClickListener(new View.OnClickListener() {
+        phoneImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (ActivityCompat.checkSelfPermission(getApplicationContext(), android.Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
@@ -139,11 +150,11 @@ public class DetailsActivity extends Activity {
             }
         });
 
-        address.setClickable(true);
-        address.setOnClickListener(new View.OnClickListener() {
+
+        addressImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Uri gmmIntentUri = Uri.parse("geo:" + latitude + "," + longitude +  "?q=" + latitude + "," + longitude + "&z=" + zoom);
+                Uri gmmIntentUri = Uri.parse("geo:" + latitude + "," + longitude + "?q=" + latitude + "," + longitude + "&z=" + zoom);
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
                 if (mapIntent.resolveActivity(getPackageManager()) != null) {
@@ -154,8 +165,8 @@ public class DetailsActivity extends Activity {
             }
         });
 
-        email.setClickable(true);
-        email.setOnClickListener(new View.OnClickListener() {
+
+        emailImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(Intent.ACTION_VIEW);
