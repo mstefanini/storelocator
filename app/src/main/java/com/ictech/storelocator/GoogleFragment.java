@@ -14,6 +14,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -40,7 +41,8 @@ public class GoogleFragment extends Fragment{
     private JSONArray jsonArray;
     private JSONObject jObject;
     private String response;
-
+    private double latitude;
+    private double longitude;
 
     public GoogleFragment() {
         // Required empty public constructor
@@ -64,7 +66,6 @@ public class GoogleFragment extends Fragment{
                              Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.fragment_google, container, false);
-
         mMapView = (MapView) view.findViewById(R.id.mapView);
         mMapView.onCreate(savedInstanceState);
         mMapView.onResume();
@@ -78,6 +79,10 @@ public class GoogleFragment extends Fragment{
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
         sessione = getArguments().getString("session");
+
+
+
+
         if(savedInstanceState != null){
             if(savedInstanceState.getString(TAGSESSIONE).equals(sessione) && savedInstanceState.getString("response") != null)
                 add2map(savedInstanceState.getString("response"));
@@ -87,28 +92,45 @@ public class GoogleFragment extends Fragment{
             Connection(url, sessione);
         }
 
+        if(getArguments().getString("latitude") != null && getArguments().getString("longitude") != null) {
+            latitude = Double.parseDouble(getArguments().getString("latitude"));
+            longitude = Double.parseDouble(getArguments().getString("longitude"));
+
+            google.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("My Position").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        }
+
         google.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 
             @Override
             public void onInfoWindowClick(Marker marker) {
-                Intent intent = new Intent(getActivity(), DetailsActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("session", sessione);
-                try {
-                    String id = marker.getId();
-                    id = id.substring(1,id.length());
-                    bundle.putString("guid", jsonArray.getJSONObject(Integer.parseInt(id)).getString("guid"));
-                } catch (JSONException e) {
-                    e.printStackTrace();
+
+                String id = marker.getId();
+                id = id.substring(1,id.length());
+                if(Integer.parseInt(id) != jsonArray.length()){
+                    Intent intent = new Intent(getActivity(), DetailsActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("session", sessione);
+                    try {
+                        bundle.putString("guid", jsonArray.getJSONObject(Integer.parseInt(id)).getString("guid"));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    intent.putExtras(bundle);
+                    startActivity(intent);
                 }
-                intent.putExtras(bundle);
-                startActivity(intent);
             }
 
         });
         return view;
     }
 
+    /**
+     *
+     * THis method add marker to map
+     * @param String respons
+     *
+     *
+     */
     public void add2map(String respons){
         response = respons;
         try {
