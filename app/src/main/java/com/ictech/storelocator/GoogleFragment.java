@@ -43,6 +43,7 @@ public class GoogleFragment extends Fragment{
     private String response;
     private double latitude;
     private double longitude;
+    private int count;
 
     public GoogleFragment() {
         // Required empty public constructor
@@ -96,7 +97,7 @@ public class GoogleFragment extends Fragment{
             latitude = Double.parseDouble(getArguments().getString("latitude"));
             longitude = Double.parseDouble(getArguments().getString("longitude"));
 
-            google.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("My Position").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+           // google.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("My Position").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         }
 
         google.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
@@ -124,13 +125,7 @@ public class GoogleFragment extends Fragment{
         return view;
     }
 
-    /**
-     *
-     * THis method add marker to map
-     * @param String respons
-     *
-     *
-     */
+
     public void add2map(String respons){
         response = respons;
         try {
@@ -149,6 +144,7 @@ public class GoogleFragment extends Fragment{
                                             new LatLng(oneObject.getDouble("latitude"), oneObject.getDouble("longitude"))).title(oneObject.getString("name")).snippet(
                                             "Phone: " + oneObject.getString("phone")).draggable(true)
                             );
+                            count++;
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
