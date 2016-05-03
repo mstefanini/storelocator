@@ -9,7 +9,6 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -35,11 +34,9 @@ public class MainActivity extends Activity {
     private LocationManager locationManager;
     private Criteria criteria;
     private String bestProvider;
-    private String latitude;
-    private String longitude;
+    private double latitude;
+    private double longitude;
     private Location location;
-
-
     private Location lastKnownLocation;
 
     @Override
@@ -71,29 +68,14 @@ public class MainActivity extends Activity {
         bottomNavigation.addItem(user);
 
 
-
-
         geoLocation();
         Log.d("TAG", "localizazion ok");
-        googleFragment = GoogleFragment.newInstance(session);
-        storeList = StoreList.newInstance(session);
         Bundle bundle = new Bundle();
         bundle.putString(SESSTAG, session);
-
-
-        if (latitude != null && longitude != null) {
-            bundle.putString("latitude", latitude);
-            Log.d("TAG", "not null lat");
-            bundle.putString("longitude", longitude);
-        } else {
-            Log.d("TAG", "NULL");
-           /* latitude = Double.toString(location.getLatitude());
-            longitude = Double.toString(location.getLongitude());
-            bundle.putString("latitude", latitude);
-            bundle.putString("longitude", longitude);*/
-            Log.d("TAG", latitude + longitude + " messi");
-        }
-
+        bundle.putDouble("latitude", latitude);
+        bundle.putDouble("longitude", longitude);
+        googleFragment = GoogleFragment.newInstance(session);
+        storeList = StoreList.newInstance(session);
         storeList.setArguments(bundle);
         googleFragment.setArguments(bundle);
 
@@ -131,10 +113,8 @@ public class MainActivity extends Activity {
     public void geoLocation() {
 
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-                /*criteria=new Criteria();
-                bestProvider=String.valueOf(locationManager.getBestProvider(criteria,true));*/
-
-
+        criteria = new Criteria();
+        bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -145,25 +125,51 @@ public class MainActivity extends Activity {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        location = locationManager.getLastKnownLocation("gps");
-                if(location!=null){
-                    Log.d("TAG","NON è NULL");
-                    latitude = String.valueOf(location.getLatitude());
-                    longitude = String.valueOf(location.getLongitude());
+        location = locationManager.getLastKnownLocation(bestProvider);
+        if (isLocationEnabled(MainActivity.this)) {
+            Log.e("TAG", "GPS is on");
+            latitude = location.getLatitude();
+            longitude = location.getLongitude();
+            Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
-
-                }else{
-                    Log.d("TAG","è NULL");
-                    location = locationManager.getLastKnownLocation("gps");
-                    latitude = String.valueOf(location.getLatitude());
-                    longitude = String.valueOf(location.getLongitude());
-                    Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:" + longitude+"location null", Toast.LENGTH_SHORT).show();
+        }
+        else
+        {
+            AlertDialog.Builder notifyLocationServices = new AlertDialog.Builder(MainActivity.this);
+            notifyLocationServices.setTitle("Switch on Location Services");
+            notifyLocationServices.setMessage("Location Services must be turned on to complete this action. Also please take note that if on a very weak network connection,  such as 'E' Mobile Data or 'Very weak Wifi-Connections' it may take even 15 mins to load. If on a very weak network connection as stated above, location returned to application may be null or nothing and cause the application to crash.");
+            notifyLocationServices.setPositiveButton("Ok, Open Settings", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent openLocationSettings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(openLocationSettings);
+                    finish();
                 }
-
+            });
+            notifyLocationServices.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+            notifyLocationServices.show();
+        }
 
     }
 
+
+    public boolean isLocationEnabled(Context context){
+       int locationMode = 0;
+
+        try
+        {
+            locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+        return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+    }
 
 
 

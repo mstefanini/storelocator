@@ -92,13 +92,14 @@ public class GoogleFragment extends Fragment{
         } else {
             Connection(url, sessione);
         }
+        latitude = getArguments().getDouble("latitude");
+        longitude = getArguments().getDouble("longitude");
 
-        if(getArguments().getString("latitude") != null && getArguments().getString("longitude") != null) {
-            latitude = Double.parseDouble(getArguments().getString("latitude"));
-            longitude = Double.parseDouble(getArguments().getString("longitude"));
+        //if(getArguments().getString("latitude") != null && getArguments().getString("longitude") != null) {
 
-           // google.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude)).title("My Position").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        }
+        //}
+
+        //google.addMarker(new MarkerOptions().position(new LatLng(0,0)).title("PROVA").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
 
         google.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 
@@ -106,8 +107,8 @@ public class GoogleFragment extends Fragment{
             public void onInfoWindowClick(Marker marker) {
 
                 String id = marker.getId();
-                id = id.substring(1,id.length());
-                if(Integer.parseInt(id) != jsonArray.length()){
+                id = id.substring(1, id.length());
+                if (Integer.parseInt(id) != 0) {
                     Intent intent = new Intent(getActivity(), DetailsActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("session", sessione);
@@ -144,7 +145,7 @@ public class GoogleFragment extends Fragment{
                                             new LatLng(oneObject.getDouble("latitude"), oneObject.getDouble("longitude"))).title(oneObject.getString("name")).snippet(
                                             "Phone: " + oneObject.getString("phone")).draggable(true)
                             );
-                            count++;
+
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -154,8 +155,17 @@ public class GoogleFragment extends Fragment{
                 Toast toast = Toast.makeText(getActivity(), jObject.getString("error"), Toast.LENGTH_SHORT);
                 toast.show();
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
+        } finally {
+
+            Toast toast = Toast.makeText(getActivity(), latitude + " " + longitude, Toast.LENGTH_SHORT);
+            toast.show();
+            google.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
+                    .title("My Position")
+                    .icon(BitmapDescriptorFactory
+                            .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
         }
     }
 
