@@ -21,6 +21,7 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="name"
             android:id="@+id/nome"
+            android:textSize="20sp"
             android:layout_gravity="center_horizontal" />
 
         <TextView
@@ -29,6 +30,8 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="surname"
             android:id="@+id/cognome"
+            android:textSize="20sp"
+
             android:layout_gravity="center_horizontal" />
 
         <TextView
@@ -37,6 +40,8 @@
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="email"
             android:id="@+id/email"
+            android:textSize="20sp"
+
             android:layout_gravity="center_horizontal" />
 
         <Button
