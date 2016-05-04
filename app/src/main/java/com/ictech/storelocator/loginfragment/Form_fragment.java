@@ -109,10 +109,11 @@ public class Form_fragment extends Fragment {
                         bundle.putString(SESSTAG, jsonObject.getJSONObject("data").getString("session"));
                         bundle.putString(DATALOGIN, jsonObject.getString("data"));
                         Intent intent = new Intent(getActivity(), MainActivity.class);
-                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                         intent.putExtras(bundle);
 
                         startActivity(intent);
+                        getActivity().finish();
 
 
                     }else{
