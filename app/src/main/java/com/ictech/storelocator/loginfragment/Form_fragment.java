@@ -38,6 +38,7 @@ import cz.msebera.android.httpclient.Header;
 public class Form_fragment extends Fragment {
 
     private static final String SESSTAG = "session";
+    public static final String DATALOGIN = "data del login";
     private static final String url = "http://its-bitrace.herokuapp.com/api/public/v2/login";
 
     private OnFromInteraction mListener;
@@ -106,6 +107,7 @@ public class Form_fragment extends Fragment {
                         Toast.makeText(getActivity(), "Benvenuto in Jesse!", Toast.LENGTH_LONG).show();
                         Bundle bundle = new Bundle();
                         bundle.putString(SESSTAG, jsonObject.getJSONObject("data").getString("session"));
+                        bundle.putString(DATALOGIN, jsonObject.getString("data"));
                         Intent intent = new Intent(getActivity(), MainActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                         intent.putExtras(bundle);
