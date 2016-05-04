@@ -9,6 +9,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.provider.Settings;
@@ -20,7 +21,7 @@ import android.widget.Toast;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements LocationListener {
 
     private static final String SESSTAG = "session";
     private static final String CURRENTITEM = "currentitem";
@@ -66,18 +67,22 @@ public class MainActivity extends Activity {
         bottomNavigation.addItem(home);
         bottomNavigation.addItem(map);
         bottomNavigation.addItem(user);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        //geoLocation();
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
 
+        }
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 
-        geoLocation();
-        Log.d("TAG", "localizazion ok");
-        Bundle bundle = new Bundle();
-        bundle.putString(SESSTAG, session);
-        bundle.putDouble("latitude", latitude);
-        bundle.putDouble("longitude", longitude);
-        googleFragment = GoogleFragment.newInstance(session);
+        googleFragment = GoogleFragment.newInstance(session, latitude, longitude);
         storeList = StoreList.newInstance(session);
-        storeList.setArguments(bundle);
-        googleFragment.setArguments(bundle);
 
         if (savedInstanceState != null) {
             session = savedInstanceState.getString(SESSTAG);
@@ -111,10 +116,83 @@ public class MainActivity extends Activity {
 
 
     public void geoLocation() {
-
+        Log.d("TAG", "localizazion start");
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        criteria = new Criteria();
-        bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+
+        if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequ7estPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            if (isLocationEnabled()) {
+
+                //criteria = new Criteria();
+                // bestProvider = String.valueOf(locationManager.getBestProvider(criteria, true)).toString();
+                /*locationManager.requestLocationUpdates(
+                        LocationManager.GPS_PROVIDER,100,0, this);
+                //location = locationManager.getLastKnownLocation(bestProvider);*/
+                location = locationManager
+                        .getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                Log.d("TAG", "GPS is on");
+                Log.d("TAG", "Location = " + location);
+                if (location != null) {
+                    latitude = location.getLatitude();
+                    longitude = location.getLongitude();
+                }
+                Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
+
+            }
+        } else {
+            AlertDialog.Builder notifyLocationServices = new AlertDialog.Builder(MainActivity.this);
+            notifyLocationServices.setTitle("Switch on Location Services");
+            notifyLocationServices.setMessage("Location Services must be turned on to complete this action. Also please take note that if on a very weak network connection,  such as 'E' Mobile Data or 'Very weak Wifi-Connections' it may take even 15 mins to load. If on a very weak network connection as stated above, location returned to application may be null or nothing and cause the application to crash.");
+            notifyLocationServices.setPositiveButton("Ok, Open Settings", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent openLocationSettings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(openLocationSettings);
+
+                }
+            });
+            notifyLocationServices.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                }
+            });
+            notifyLocationServices.show();
+        }
+
+
+        Log.d("TAG", "localizazion end");
+    }
+
+
+    public boolean isLocationEnabled(Context context) {
+        int locationMode = 0;
+
+        try {
+            locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
+        } catch (Settings.SettingNotFoundException e) {
+            e.printStackTrace();
+        }
+        return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+
+
+    }
+
+    public boolean isLocationEnabled() {
+        return locationManager
+                .isProviderEnabled(LocationManager.GPS_PROVIDER);
+    }
+
+
+    @Override
+    public void onLocationChanged(Location locationC) {
+        location = locationC;
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -125,52 +203,23 @@ public class MainActivity extends Activity {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        location = locationManager.getLastKnownLocation(bestProvider);
-        if (isLocationEnabled(MainActivity.this)) {
-            Log.e("TAG", "GPS is on");
-            latitude = location.getLatitude();
-            longitude = location.getLongitude();
-            Toast.makeText(MainActivity.this, "latitude:" + latitude + " longitude:" + longitude, Toast.LENGTH_SHORT).show();
+        googleFragment = GoogleFragment.newInstance(session, locationC.getLatitude(), locationC.getLongitude());
+       // googleFragment.setLocation(locationC);
+        locationManager.removeUpdates(this);
+    }
 
-        }
-        else
-        {
-            AlertDialog.Builder notifyLocationServices = new AlertDialog.Builder(MainActivity.this);
-            notifyLocationServices.setTitle("Switch on Location Services");
-            notifyLocationServices.setMessage("Location Services must be turned on to complete this action. Also please take note that if on a very weak network connection,  such as 'E' Mobile Data or 'Very weak Wifi-Connections' it may take even 15 mins to load. If on a very weak network connection as stated above, location returned to application may be null or nothing and cause the application to crash.");
-            notifyLocationServices.setPositiveButton("Ok, Open Settings", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    Intent openLocationSettings = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(openLocationSettings);
-                    finish();
-                }
-            });
-            notifyLocationServices.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    finish();
-                }
-            });
-            notifyLocationServices.show();
-        }
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
 
     }
 
-
-    public boolean isLocationEnabled(Context context){
-       int locationMode = 0;
-
-        try
-        {
-            locationMode = Settings.Secure.getInt(context.getContentResolver(), Settings.Secure.LOCATION_MODE);
-        } catch (Settings.SettingNotFoundException e) {
-            e.printStackTrace();
-        }
-        return locationMode != Settings.Secure.LOCATION_MODE_OFF;
+    @Override
+    public void onProviderEnabled(String provider) {
 
     }
 
+    @Override
+    public void onProviderDisabled(String provider) {
 
-
+    }
 }

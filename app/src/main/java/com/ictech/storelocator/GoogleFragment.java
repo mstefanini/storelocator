@@ -4,6 +4,7 @@ package com.ictech.storelocator;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
+import android.location.Location;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
@@ -49,10 +50,12 @@ public class GoogleFragment extends Fragment{
         // Required empty public constructor
     }
 
-    public static GoogleFragment newInstance(String sess){
+    public static GoogleFragment newInstance(String sess, double aLatitude, double aLongitude){
         GoogleFragment fragment = new GoogleFragment();
         Bundle bundle = new Bundle();
         bundle.putString("session", sess);
+        bundle.putDouble("latitude", aLatitude);
+        bundle.putDouble("longitude", aLongitude);
         fragment.setArguments(bundle);
         return fragment;
     }
@@ -83,7 +86,6 @@ public class GoogleFragment extends Fragment{
 
 
 
-
         if(savedInstanceState != null){
             if(savedInstanceState.getString(TAGSESSIONE).equals(sessione) && savedInstanceState.getString("response") != null)
                 add2map(savedInstanceState.getString("response"));
@@ -92,14 +94,9 @@ public class GoogleFragment extends Fragment{
         } else {
             Connection(url, sessione);
         }
-        latitude = getArguments().getDouble("latitude");
-        longitude = getArguments().getDouble("longitude");
 
-        //if(getArguments().getString("latitude") != null && getArguments().getString("longitude") != null) {
 
-        //}
-
-        //google.addMarker(new MarkerOptions().position(new LatLng(0,0)).title("PROVA").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW)));
+        setLocation();
 
         google.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 
@@ -123,6 +120,9 @@ public class GoogleFragment extends Fragment{
             }
 
         });
+
+
+
         return view;
     }
 
@@ -160,12 +160,11 @@ public class GoogleFragment extends Fragment{
             e.printStackTrace();
         } finally {
 
-            Toast toast = Toast.makeText(getActivity(), latitude + " " + longitude, Toast.LENGTH_SHORT);
-            toast.show();
-            google.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
+
+            /*google.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
                     .title("My Position")
                     .icon(BitmapDescriptorFactory
-                            .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+                            .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));*/
         }
     }
 
@@ -200,6 +199,7 @@ public class GoogleFragment extends Fragment{
                 }
         );
     }
+
 
     @Override
     public void onStart() {
@@ -253,6 +253,23 @@ public class GoogleFragment extends Fragment{
         super.onCreate(savedInstanceState);
     }
 
+    public void setLocation(Location aLocation){
+        longitude = aLocation.getLongitude();
+        latitude = aLocation.getLatitude();
+        google.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
+                .title("My Position")
+                .icon(BitmapDescriptorFactory
+                        .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+        Toast toast = Toast.makeText(getActivity(), latitude + " " + longitude, Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    public void setLocation(){
+        google.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
+                .title("My Position")
+                .icon(BitmapDescriptorFactory
+                        .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
+    }
 
 
 }
