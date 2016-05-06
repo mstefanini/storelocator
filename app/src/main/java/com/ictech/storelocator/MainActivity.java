@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
-import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -21,7 +20,7 @@ import android.widget.Toast;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
 
-public class MainActivity extends Activity implements LocationListener {
+public class MainActivity extends Activity implements LocationListener, GoogleFragment.IOsetMappe {
 
     private static final String SESSTAG = "session";
     private static final String CURRENTITEM = "currentitem";
@@ -33,18 +32,35 @@ public class MainActivity extends Activity implements LocationListener {
     private String session;
     private AHBottomNavigation bottomNavigation;
     private LocationManager locationManager;
-    private Criteria criteria;
-    private String bestProvider;
     private double latitude;
     private double longitude;
     private Location location;
-    private Location lastKnownLocation;
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(SESSTAG, session);
         outState.putInt(CURRENTITEM, bottomNavigation.getCurrentItem());
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
     }
 
     @Override
@@ -68,7 +84,6 @@ public class MainActivity extends Activity implements LocationListener {
         bottomNavigation.addItem(map);
         bottomNavigation.addItem(user);
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        //geoLocation();
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
@@ -77,7 +92,6 @@ public class MainActivity extends Activity implements LocationListener {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-
         }
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 
@@ -203,9 +217,11 @@ public class MainActivity extends Activity implements LocationListener {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        googleFragment = GoogleFragment.newInstance(session, locationC.getLatitude(), locationC.getLongitude());
+        latitude = locationC.getLatitude();
+        longitude = locationC.getLongitude();
+       // googleFragment = GoogleFragment.newInstance(session, locationC.getLatitude(), locationC.getLongitude());
        // googleFragment.setLocation(locationC);
-        locationManager.removeUpdates(this);
+        //locationManager.removeUpdates(this);
     }
 
     @Override
@@ -221,5 +237,15 @@ public class MainActivity extends Activity implements LocationListener {
     @Override
     public void onProviderDisabled(String provider) {
 
+    }
+
+    @Override
+    public double getMyLatitude() {
+        return latitude;
+    }
+
+    @Override
+    public double getMyLongitude() {
+        return longitude;
     }
 }

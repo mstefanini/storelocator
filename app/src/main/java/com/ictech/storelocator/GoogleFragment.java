@@ -4,7 +4,6 @@ package com.ictech.storelocator;
 import android.app.Activity;
 import android.app.Fragment;
 import android.content.Intent;
-import android.location.Location;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.view.LayoutInflater;
@@ -34,6 +33,7 @@ import cz.msebera.android.httpclient.Header;
  */
 public class GoogleFragment extends Fragment{
     private static final String TAGSESSIONE = "lastSessio";
+    private static final String RESPONSE = "response";
     private MapView mMapView;
     private GoogleMap google;
     private String sessione;
@@ -44,8 +44,24 @@ public class GoogleFragment extends Fragment{
     private String response;
     private double latitude;
     private double longitude;
-    private int count;
 
+    public interface IOsetMappe{
+        double getMyLatitude();
+        double getMyLongitude();
+    }
+
+    private IOsetMappe mListener = new IOsetMappe() {
+
+        @Override
+        public double getMyLatitude() {
+            return 0;
+        }
+
+        @Override
+        public double getMyLongitude() {
+            return 0;
+        }
+    };
     public GoogleFragment() {
         // Required empty public constructor
     }
@@ -63,6 +79,9 @@ public class GoogleFragment extends Fragment{
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        if(getActivity() instanceof IOsetMappe){
+            mListener = (IOsetMappe)getActivity();
+        }
     }
 
     @Override
@@ -80,23 +99,35 @@ public class GoogleFragment extends Fragment{
             e.printStackTrace();
         }
 
-        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-        StrictMode.setThreadPolicy(policy);
         sessione = getArguments().getString("session");
 
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
 
 
-        if(savedInstanceState != null){
-            if(savedInstanceState.getString(TAGSESSIONE).equals(sessione) && savedInstanceState.getString("response") != null)
-                add2map(savedInstanceState.getString("response"));
-            else
+       if(savedInstanceState != null){
+            if(savedInstanceState.getString(TAGSESSIONE).equals(sessione) && savedInstanceState.getString(RESPONSE) != null) {
+                add2map(savedInstanceState.getString(RESPONSE));
+                latitude = savedInstanceState.getDouble("latitude");
+                longitude = savedInstanceState.getDouble("longitude");
+            } else{
                 Connection(url, sessione);
+                latitude = mListener.getMyLatitude();
+                longitude = mListener.getMyLongitude();
+            }
         } else {
-            Connection(url, sessione);
+           Connection(url, sessione);
+           latitude = mListener.getMyLatitude();
+           longitude = mListener.getMyLongitude();
         }
 
 
-        setLocation();
+        //setLocation();
+
+        google.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
+                .title("My Position")
+                .icon(BitmapDescriptorFactory
+                        .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
 
         google.setOnInfoWindowClickListener(new GoogleMap.OnInfoWindowClickListener() {
 
@@ -158,13 +189,6 @@ public class GoogleFragment extends Fragment{
 
         } catch (JSONException e) {
             e.printStackTrace();
-        } finally {
-
-
-            /*google.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
-                    .title("My Position")
-                    .icon(BitmapDescriptorFactory
-                            .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));*/
         }
     }
 
@@ -215,7 +239,9 @@ public class GoogleFragment extends Fragment{
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(TAGSESSIONE, sessione);
-        outState.putString("response", response);
+        outState.putString(RESPONSE, response);
+        outState.putDouble("latitude", latitude);
+        outState.putDouble("longitude", longitude);
     }
 
     @Override
@@ -236,6 +262,7 @@ public class GoogleFragment extends Fragment{
     @Override
     public void onDetach() {
         super.onDetach();
+        mListener = null;
     }
 
 
@@ -252,24 +279,4 @@ public class GoogleFragment extends Fragment{
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
-
-    public void setLocation(Location aLocation){
-        longitude = aLocation.getLongitude();
-        latitude = aLocation.getLatitude();
-        google.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
-                .title("My Position")
-                .icon(BitmapDescriptorFactory
-                        .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-        Toast toast = Toast.makeText(getActivity(), latitude + " " + longitude, Toast.LENGTH_SHORT);
-        toast.show();
-    }
-
-    public void setLocation(){
-        google.addMarker(new MarkerOptions().position(new LatLng(latitude, longitude))
-                .title("My Position")
-                .icon(BitmapDescriptorFactory
-                        .defaultMarker(BitmapDescriptorFactory.HUE_AZURE)));
-    }
-
-
 }
