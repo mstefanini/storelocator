@@ -97,8 +97,12 @@ public class MainActivity extends Activity implements LocationListener, GoogleFr
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
+            latitude = 0;
+            longitude = 0;
+        }else{
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+
         }
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 
         googleFragment = GoogleFragment.newInstance(session, latitude, longitude);
         storeList = StoreList.newInstance(session);
