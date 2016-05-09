@@ -3,6 +3,7 @@ package com.ictech.storelocator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
@@ -114,6 +115,13 @@ public class DetailsActivity extends Activity {
                                 if (!t.getJSONObject(i).getBoolean("isAvailable"))
                                     Available = "Not Available";
                                 vAvaible.setText(" " + Available);
+
+                                if(Available.equals("Not Available")){
+                                    vAvaible.setTextColor(Color.parseColor("#8c1d32"));
+                                }else{
+                                    vAvaible.setTextColor(Color.parseColor("#1a6631"));
+                                }
+
                                 layout.addView(child);
                             }
                         } catch (JSONException e) {

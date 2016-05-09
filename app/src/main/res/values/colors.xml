@@ -6,6 +6,10 @@
     <color name="colorAccent">#c49e69</color>
 
 
+    <color name="presente">#1a6631</color>
+    <color name="assente">#661a28</color>
+
+
     <color name="black">#202020</color>
     <color name="gold">#c49e69</color>
     <color name="goldDark">#8f6f44</color>

@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigation;
 import com.aurelhubert.ahbottomnavigation.AHBottomNavigationItem;
+import com.ictech.storelocator.loginfragment.Form_fragment;
 
 public class MainActivity extends Activity implements LocationListener, GoogleFragment.IOsetMappe {
 
@@ -26,10 +27,13 @@ public class MainActivity extends Activity implements LocationListener, GoogleFr
     private static final String CURRENTITEM = "currentitem";
     private static final String GMAPSFRAG = "googlemapsfragment";
     private static final String ELENCO = "fragment_RecycleView";
+    private static final String PROFILO = "profilo utente";
     private FragmentManager fragmentManager = getFragmentManager();
     private GoogleFragment googleFragment;
     private StoreList storeList;
+    private UserAccount userAccount;
     private String session;
+    private String dataLogin;
     private AHBottomNavigation bottomNavigation;
     private LocationManager locationManager;
     private double latitude;
@@ -72,6 +76,7 @@ public class MainActivity extends Activity implements LocationListener, GoogleFr
         if (intent != null) {
             Bundle bundle = intent.getExtras();
             session = bundle.getString(SESSTAG);
+            dataLogin = bundle.getString(Form_fragment.DATALOGIN);
         }
 
         bottomNavigation = (AHBottomNavigation) findViewById(R.id.bottom_navigation);
@@ -98,6 +103,13 @@ public class MainActivity extends Activity implements LocationListener, GoogleFr
         googleFragment = GoogleFragment.newInstance(session, latitude, longitude);
         storeList = StoreList.newInstance(session);
 
+        userAccount = UserAccount.newInstance(session, dataLogin);
+        //Bundle bundle = new Bundle();
+        //bundle.putString(SESSTAG, session);
+//        storeList.setArguments(bundle);
+//        googleFragment.setArguments(bundle);
+//        userAccount.setArguments(bundle);
+
         if (savedInstanceState != null) {
             session = savedInstanceState.getString(SESSTAG);
             bottomNavigation.setCurrentItem(savedInstanceState.getInt(CURRENTITEM));
@@ -120,6 +132,11 @@ public class MainActivity extends Activity implements LocationListener, GoogleFr
                 if (position == 1) {
                     fragmentManager.beginTransaction()
                             .replace(R.id.frame, googleFragment, GMAPSFRAG)
+                            .commit();
+                }
+                if (position == 2) {
+                    fragmentManager.beginTransaction()
+                            .replace(R.id.frame, userAccount, PROFILO)
                             .commit();
                 }
             }

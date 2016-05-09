@@ -8,6 +8,8 @@ import android.os.Bundle;
 import com.ictech.storelocator.loginfragment.First_fragment;
 import com.ictech.storelocator.loginfragment.Form_fragment;
 
+import java.text.Normalizer;
+
 public class LoginActivity extends Activity
         implements First_fragment.OnFragmentInteractionListener,
                     Form_fragment.OnFromInteraction {
@@ -23,10 +25,10 @@ public class LoginActivity extends Activity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);   //carica il layout associato alla activity
 
-        if( (first_fragment = (First_fragment) fragmentManager.findFragmentByTag(FragTag)) == null){
-            first_fragment = First_fragment.newInstance();      //se non esiste ancora il fragment di firstfragment lo inizializza
+        if( (form_fragment = (Form_fragment) fragmentManager.findFragmentByTag(FragTag2)) == null){
+            form_fragment = Form_fragment.newInstance();      //se non esiste ancora il fragment di firstfragment lo inizializza
             fragmentManager.beginTransaction()
-                    .add(R.id.fragment_frame, first_fragment, FragTag)
+                    .add(R.id.fragment_frame, form_fragment, FragTag2)
                     .commit();
         }
     }
